@@ -1,8 +1,8 @@
-﻿{
-  "version": 2,
+{
+  "cleanUrls": true,
   "rewrites": [
-    { "source": "/api/initiate", "destination": "/api/initiate.js" },
-    { "source": "/api/status", "destination": "/api/status.js" },
-    { "source": "/api/pesapal-ipn", "destination": "/api/pesapal-ipn.js" }
+    { "source": "/api/payment/initiate", "destination": "/api/initiate" },
+    { "source": "/api/payment/status", "destination": "/api/status" },
+    { "source": "/api/public/pesapal-ipn", "destination": "/api/pesapal-ipn" }
   ]
 }
