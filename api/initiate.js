@@ -129,6 +129,11 @@ module.exports = async function handler(req, res) {
     const redirectUrl = order.redirect_url || order.redirectUrl || order.RedirectUrl;
 
     if (!orderTrackingId || !redirectUrl) {
+      if (order.error?.code === "amount_exceeds_default_limit") {
+        throw new Error(
+          `PesaPal Account Limit: Amount (KSh ${amount.toLocaleString()}) exceeds your account's temporary uncontracted limit (max KSh 1,000). Contact PesaPal merchant support or complete business onboarding to process full tier amounts.`
+        );
+      }
       const errMsg = order.error?.message || order.error?.code || order.message || "Pesapal rejected the order request";
       throw new Error(errMsg);
     }
