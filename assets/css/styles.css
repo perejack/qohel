@@ -764,3 +764,45 @@ body {
   text-shadow: 0 0 12px rgba(212, 175, 55, 0.5);
 }
 
+/* ==========================================================================
+   WHY LEGACY LENS & PARTNER FOR TWC 2026 STYLES
+   ========================================================================== */
+.advantage-navy-card {
+  background: radial-gradient(circle at top left, rgba(26, 18, 54, 0.85), rgba(10, 14, 28, 0.95));
+  border: 1px solid rgba(138, 92, 246, 0.25);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+}
+.advantage-navy-card:hover {
+  border-color: rgba(212, 175, 55, 0.45);
+}
+
+.partner-bar-card {
+  position: relative;
+  background: rgba(11, 17, 33, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 4px solid #d4af37;
+  border-radius: 4px 8px 8px 4px;
+  padding: 1.5rem 1.25rem;
+  transition: var(--transition-smooth);
+}
+.partner-bar-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(212, 175, 55, 0.4);
+  border-left-color: #ffd700;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(212, 175, 55, 0.15);
+}
+
+.custom-gold-bullet {
+  position: relative;
+  padding-left: 1.25rem;
+}
+.custom-gold-bullet::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  top: -1px;
+  color: #d4af37;
+  font-size: 1.25rem;
+}
+
+
