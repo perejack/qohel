@@ -1185,149 +1185,98 @@
       </div>
 
       <!-- ========================================================================
-           METHODOLOGY // HOW WE ENGINEER RESULTS
+           METHODOLOGY: HOW WE ENGINEER RESULTS (4-PHASE DIAMOND NEXUS)
            ======================================================================== -->
-      <div class="mt-24 pt-16 border-t border-gold/20">
+      <div class="mt-24 pt-20 border-t border-gold/20 relative overflow-hidden">
         
+        <!-- Ambient Radial Glow Behind Nexus -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[32rem] h-[32rem] bg-gold/10 blur-[140px] rounded-full pointer-events-none -z-10"></div>
+
         <!-- Section Header -->
-        <div class="max-w-3xl mb-12">
-          <div class="inline-block px-3 py-1 rounded border border-gold/40 text-[10px] font-mono uppercase tracking-widest text-gold mb-4">
-            METHODOLOGY
+        <div class="max-w-4xl mx-auto text-center mb-16">
+          <div class="mb-4">
+            <span class="methodology-badge">METHODOLOGY</span>
           </div>
-          <h4 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal text-gold mb-6 leading-tight">
+          
+          <h3 class="font-serif text-3xl sm:text-5xl font-bold text-gold tracking-wide mb-4">
             How We Engineer Results
-          </h4>
-          <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
-            Every engagement follows a disciplined four-phase process &mdash; from initial audit through to live deployment and performance optimization.
+          </h3>
+
+          <p class="text-slate-300 text-sm sm:text-base max-w-3xl mx-auto leading-relaxed font-sans">
+            Every engagement follows a disciplined four-phase process — from initial audit through to live deployment and performance optimization.
           </p>
         </div>
 
-        <!-- 4-Phase Interactive Diamond Methodology Layout -->
-        <div class="relative py-12 px-6 sm:px-10 glass-panel rounded-2xl border border-gold/30 shadow-2xl mb-12 overflow-hidden bg-gradient-to-b from-navy-card/90 via-obsidian/95 to-navy-card/90">
+        <!-- Interactive 4-Phase Diamond Nexus Layout -->
+        <div class="max-w-4xl mx-auto px-4 mb-16">
           
-          <!-- Background Ambient Glow -->
-          <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gold/10 blur-[130px] rounded-full pointer-events-none"></div>
-
-          <!-- Desktop & Tablet Interactive Formation -->
-          <div class="hidden md:grid grid-cols-12 items-center gap-6 relative z-10 my-8">
-            
-            <!-- Left Column: Strategy (Top) & Audit (Bottom) -->
-            <div class="col-span-4 flex flex-col justify-between space-y-24 text-right pr-4">
-              <!-- Strategy -->
-              <div class="group transition-all duration-300 hover:translate-x-[-4px]">
-                <h5 class="font-serif text-2xl font-normal text-gold mb-2 group-hover:text-gold-bright transition-colors">
-                  Strategy
-                </h5>
-                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
-                  Brand architecture and content roadmap.
-                </p>
-              </div>
-
-              <!-- Audit -->
-              <div class="group transition-all duration-300 hover:translate-x-[-4px]">
-                <h5 class="font-serif text-2xl font-normal text-gold mb-2 group-hover:text-gold-bright transition-colors">
-                  Audit
-                </h5>
-                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
-                  Digital footprint analysis and audience mapping.
-                </p>
-              </div>
+          <!-- Top Row (Strategy & Production) -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-28 mb-4 md:mb-0">
+            <!-- Top Left: Strategy -->
+            <div class="methodology-card text-center md:text-right" data-phase="strategy">
+              <h4 class="methodology-title font-serif text-2xl sm:text-3xl font-bold text-gold mb-1.5 transition-colors">
+                Strategy
+              </h4>
+              <p class="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-xs md:ml-auto">
+                Brand architecture and content roadmap.
+              </p>
             </div>
 
-            <!-- Center Column: 4-Diamond Matrix -->
-            <div class="col-span-4 flex items-center justify-center py-6">
-              <div class="relative w-64 h-64 flex items-center justify-center">
-                
-                <!-- 4 Tilted Diamonds Formation -->
-                <div class="grid grid-cols-2 gap-2.5 transform rotate-45 transition-transform duration-500 hover:scale-105">
-                  <!-- Diamond 1: Strategy (Top-Left) -->
-                  <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-md bg-gradient-to-br from-[#c99e28] to-[#9c7816] shadow-lg shadow-gold/20 border border-gold/40 transition-all duration-300 hover:brightness-125 cursor-pointer flex items-center justify-center group" title="Strategy">
-                    <span class="transform -rotate-45 text-[10px] font-mono font-bold text-obsidian uppercase opacity-0 group-hover:opacity-100 transition-opacity">01</span>
-                  </div>
-                  <!-- Diamond 2: Production (Top-Right) -->
-                  <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-md bg-gradient-to-br from-[#f3db83] to-[#d4af37] shadow-lg shadow-gold/25 border border-gold-bright/60 transition-all duration-300 hover:brightness-125 cursor-pointer flex items-center justify-center group" title="Production">
-                    <span class="transform -rotate-45 text-[10px] font-mono font-bold text-obsidian uppercase opacity-0 group-hover:opacity-100 transition-opacity">02</span>
-                  </div>
-                  <!-- Diamond 3: Audit (Bottom-Left) -->
-                  <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-md bg-gradient-to-br from-[#e0b93d] to-[#b38b1e] shadow-lg shadow-gold/20 border border-gold/40 transition-all duration-300 hover:brightness-125 cursor-pointer flex items-center justify-center group" title="Audit">
-                    <span class="transform -rotate-45 text-[10px] font-mono font-bold text-obsidian uppercase opacity-0 group-hover:opacity-100 transition-opacity">03</span>
-                  </div>
-                  <!-- Diamond 4: Deploy (Bottom-Right) -->
-                  <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-md bg-gradient-to-br from-[#f8e49c] to-[#e4be4a] shadow-lg shadow-gold/30 border border-gold-bright/60 transition-all duration-300 hover:brightness-125 cursor-pointer flex items-center justify-center group" title="Deploy">
-                    <span class="transform -rotate-45 text-[10px] font-mono font-bold text-obsidian uppercase opacity-0 group-hover:opacity-100 transition-opacity">04</span>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-
-            <!-- Right Column: Production (Top) & Deploy (Bottom) -->
-            <div class="col-span-4 flex flex-col justify-between space-y-24 text-left pl-4">
-              <!-- Production -->
-              <div class="group transition-all duration-300 hover:translate-x-[4px]">
-                <h5 class="font-serif text-2xl font-normal text-gold mb-2 group-hover:text-gold-bright transition-colors">
-                  Production
-                </h5>
-                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
-                  Cinematic content creation and post-production.
-                </p>
-              </div>
-
-              <!-- Deploy -->
-              <div class="group transition-all duration-300 hover:translate-x-[4px]">
-                <h5 class="font-serif text-2xl font-normal text-gold mb-2 group-hover:text-gold-bright transition-colors">
-                  Deploy
-                </h5>
-                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
-                  Platform launch, analytics tracking, optimization.
-                </p>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- Mobile Friendly Quadrant Cards -->
-          <div class="md:hidden grid grid-cols-1 sm:grid-cols-2 gap-4 relative z-10 my-4">
-            <div class="p-5 rounded-xl bg-navy-deep/80 border border-gold/30 flex items-start gap-4">
-              <div class="w-8 h-8 rounded bg-gradient-to-br from-[#c99e28] to-[#9c7816] transform rotate-45 shrink-0 mt-1 flex items-center justify-center"></div>
-              <div>
-                <h5 class="font-serif text-lg font-normal text-gold mb-1">Strategy</h5>
-                <p class="text-xs text-slate-300">Brand architecture and content roadmap.</p>
-              </div>
-            </div>
-
-            <div class="p-5 rounded-xl bg-navy-deep/80 border border-gold/30 flex items-start gap-4">
-              <div class="w-8 h-8 rounded bg-gradient-to-br from-[#f3db83] to-[#d4af37] transform rotate-45 shrink-0 mt-1 flex items-center justify-center"></div>
-              <div>
-                <h5 class="font-serif text-lg font-normal text-gold mb-1">Production</h5>
-                <p class="text-xs text-slate-300">Cinematic content creation and post-production.</p>
-              </div>
-            </div>
-
-            <div class="p-5 rounded-xl bg-navy-deep/80 border border-gold/30 flex items-start gap-4">
-              <div class="w-8 h-8 rounded bg-gradient-to-br from-[#e0b93d] to-[#b38b1e] transform rotate-45 shrink-0 mt-1 flex items-center justify-center"></div>
-              <div>
-                <h5 class="font-serif text-lg font-normal text-gold mb-1">Audit</h5>
-                <p class="text-xs text-slate-300">Digital footprint analysis and audience mapping.</p>
-              </div>
-            </div>
-
-            <div class="p-5 rounded-xl bg-navy-deep/80 border border-gold/30 flex items-start gap-4">
-              <div class="w-8 h-8 rounded bg-gradient-to-br from-[#f8e49c] to-[#e4be4a] transform rotate-45 shrink-0 mt-1 flex items-center justify-center"></div>
-              <div>
-                <h5 class="font-serif text-lg font-normal text-gold mb-1">Deploy</h5>
-                <p class="text-xs text-slate-300">Platform launch, analytics tracking, optimization.</p>
-              </div>
+            <!-- Top Right: Production -->
+            <div class="methodology-card text-center md:text-left" data-phase="production">
+              <h4 class="methodology-title font-serif text-2xl sm:text-3xl font-bold text-gold mb-1.5 transition-colors">
+                Production
+              </h4>
+              <p class="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-xs md:mr-auto">
+                Cinematic content creation and post-production.
+              </p>
             </div>
           </div>
 
-          <!-- Section Footer -->
-          <div class="pt-8 border-t border-white/10 relative z-10">
-            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-4xl">
-              This structured methodology ensures that every deliverable is grounded in data, executed with cinematic precision, and measured against clear commercial KPIs.
-            </p>
+          <!-- Center Diamond Matrix Cluster -->
+          <div class="py-6 my-2">
+            <div class="methodology-diamond-cluster">
+              <!-- Tile 1: Strategy (Top-Left) -->
+              <div class="diamond-tile diamond-strategy" data-phase="strategy" title="Phase 01: Strategy"></div>
+              <!-- Tile 2: Production (Top-Right) -->
+              <div class="diamond-tile diamond-production" data-phase="production" title="Phase 02: Production"></div>
+              <!-- Tile 3: Audit (Bottom-Left) -->
+              <div class="diamond-tile diamond-audit" data-phase="audit" title="Phase 03: Audit"></div>
+              <!-- Tile 4: Deploy (Bottom-Right) -->
+              <div class="diamond-tile diamond-deploy" data-phase="deploy" title="Phase 04: Deploy"></div>
+            </div>
           </div>
 
+          <!-- Bottom Row (Audit & Deploy) -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-28 mt-4 md:mt-0">
+            <!-- Bottom Left: Audit -->
+            <div class="methodology-card text-center md:text-right" data-phase="audit">
+              <h4 class="methodology-title font-serif text-2xl sm:text-3xl font-bold text-gold mb-1.5 transition-colors">
+                Audit
+              </h4>
+              <p class="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-xs md:ml-auto">
+                Digital footprint analysis and audience mapping.
+              </p>
+            </div>
+
+            <!-- Bottom Right: Deploy -->
+            <div class="methodology-card text-center md:text-left" data-phase="deploy">
+              <h4 class="methodology-title font-serif text-2xl sm:text-3xl font-bold text-gold mb-1.5 transition-colors">
+                Deploy
+              </h4>
+              <p class="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-xs md:mr-auto">
+                Platform launch, analytics tracking, optimization.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Closing KPI Anchor Text -->
+        <div class="max-w-3xl mx-auto text-center px-4">
+          <p class="text-slate-300 text-xs sm:text-sm leading-relaxed font-sans">
+            This structured methodology ensures that every deliverable is grounded in data, executed with cinematic precision, and measured against clear commercial KPIs.
+          </p>
         </div>
 
       </div>

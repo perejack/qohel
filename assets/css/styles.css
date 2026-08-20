@@ -636,3 +636,131 @@ body {
   height: 100%;
   object-fit: cover;
 }
+
+/* ==========================================================================
+   METHODOLOGY — 4-PHASE DIAMOND NEXUS MATRIX
+   ========================================================================== */
+.methodology-badge {
+  display: inline-block;
+  padding: 0.25rem 0.85rem;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  background: rgba(10, 16, 30, 0.6);
+  color: var(--gold-light);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border-radius: 2px;
+}
+
+.methodology-diamond-cluster {
+  position: relative;
+  width: 240px;
+  height: 240px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .methodology-diamond-cluster {
+    width: 280px;
+    height: 280px;
+  }
+}
+
+.diamond-tile {
+  position: absolute;
+  width: 72px;
+  height: 72px;
+  transform: rotate(45deg);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+@media (min-width: 768px) {
+  .diamond-tile {
+    width: 86px;
+    height: 86px;
+  }
+}
+
+.diamond-tile:hover, .diamond-tile.active {
+  transform: rotate(45deg) scale(1.1);
+  z-index: 10;
+  box-shadow: 0 0 35px rgba(212, 175, 55, 0.65), inset 0 0 15px rgba(255, 255, 255, 0.4);
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+/* 4 Diamond Tile Positions */
+/* Top-Left / Strategy */
+.diamond-strategy {
+  top: 36px;
+  left: 36px;
+  background: linear-gradient(135deg, #bfa127, #8e7716);
+}
+@media (min-width: 768px) {
+  .diamond-strategy {
+    top: 42px;
+    left: 42px;
+  }
+}
+
+/* Top-Right / Production */
+.diamond-production {
+  top: 36px;
+  right: 36px;
+  background: linear-gradient(135deg, #faebb7, #ebd673);
+}
+@media (min-width: 768px) {
+  .diamond-production {
+    top: 42px;
+    right: 42px;
+  }
+}
+
+/* Bottom-Left / Audit */
+.diamond-audit {
+  bottom: 36px;
+  left: 36px;
+  background: linear-gradient(135deg, #e0bc1e, #b89812);
+}
+@media (min-width: 768px) {
+  .diamond-audit {
+    bottom: 42px;
+    left: 42px;
+  }
+}
+
+/* Bottom-Right / Deploy */
+.diamond-deploy {
+  bottom: 36px;
+  right: 36px;
+  background: linear-gradient(135deg, #ebd04e, #cba41e);
+}
+@media (min-width: 768px) {
+  .diamond-deploy {
+    bottom: 42px;
+    right: 42px;
+  }
+}
+
+/* Interactive Card links */
+.methodology-card {
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+}
+.methodology-card:hover, .methodology-card.active {
+  background: rgba(212, 175, 55, 0.06);
+  transform: translateY(-2px);
+}
+.methodology-card:hover .methodology-title, .methodology-card.active .methodology-title {
+  color: #fff !important;
+  text-shadow: 0 0 12px rgba(212, 175, 55, 0.5);
+}
+

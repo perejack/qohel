@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initBooksModal();
   initTWCModals();
   initMobileDockScrollspy();
+  initMethodologyMatrix();
 });
 
 /* ==========================================================================
@@ -1251,4 +1252,52 @@ function initMobileDockScrollspy() {
     });
   }, { passive: true });
 }
+
+/* ==========================================================================
+   11. METHODOLOGY DIAMOND NEXUS MATRIX INTERACTION
+   ========================================================================== */
+function initMethodologyMatrix() {
+  const tiles = document.querySelectorAll('.diamond-tile');
+  const cards = document.querySelectorAll('.methodology-card');
+  if (tiles.length === 0 || cards.length === 0) return;
+
+  function setActivePhase(phase) {
+    tiles.forEach(t => t.classList.toggle('active', t.getAttribute('data-phase') === phase));
+    cards.forEach(c => c.classList.toggle('active', c.getAttribute('data-phase') === phase));
+  }
+
+  function clearActivePhase() {
+    tiles.forEach(t => t.classList.remove('active'));
+    cards.forEach(c => c.classList.remove('active'));
+  }
+
+  tiles.forEach(tile => {
+    tile.addEventListener('mouseenter', () => {
+      const phase = tile.getAttribute('data-phase');
+      setActivePhase(phase);
+      playTone(523.25, 0.05, 'triangle');
+    });
+    tile.addEventListener('mouseleave', clearActivePhase);
+    tile.addEventListener('click', () => {
+      const phase = tile.getAttribute('data-phase');
+      setActivePhase(phase);
+      playTone(659.25, 0.08, 'sine');
+    });
+  });
+
+  cards.forEach(card => {
+    card.addEventListener('mouseenter', () => {
+      const phase = card.getAttribute('data-phase');
+      setActivePhase(phase);
+      playTone(523.25, 0.05, 'triangle');
+    });
+    card.addEventListener('mouseleave', clearActivePhase);
+    card.addEventListener('click', () => {
+      const phase = card.getAttribute('data-phase');
+      setActivePhase(phase);
+      playTone(659.25, 0.08, 'sine');
+    });
+  });
+}
+
 
