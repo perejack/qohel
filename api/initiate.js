@@ -96,7 +96,8 @@ module.exports = async function handler(req, res) {
 
     const cleanPhone = normalizePhone(phone || "0115475254");
     const reference = "QAG-TWC-" + Date.now();
-    const amount = Number(String(tierPrice || 7500).replace(/[^0-9.]/g, "")) || 7500;
+    // Test mode active: charge 10 KES for testing payment gateway as requested
+    const amount = 10;
 
     const firstName = (delegateName || "Delegate").split(" ")[0] || "Delegate";
     const lastName = (delegateName || "").split(" ").slice(1).join(" ") || "";

@@ -775,7 +775,7 @@ function initTWCModals() {
       const nameEl = document.getElementById('twc-selected-tier-name');
       const priceEl = document.getElementById('twc-selected-tier-price');
       if (nameEl) nameEl.innerText = currentTierName;
-      if (priceEl) priceEl.innerText = currentTierPrice;
+      if (priceEl) priceEl.innerText = 'KSH 10 (Test Mode)';
 
       resetModal();
       modal.classList.add('active');
@@ -827,8 +827,8 @@ function initTWCModals() {
         return;
       }
 
-      const priceText = currentTierPrice.replace(/[^0-9]/g, '');
-      const amount = parseInt(priceText, 10) || 7500;
+      // Test Mode Active: Set amount to 10 KES as requested
+      const amount = 10;
 
       const submitBtn = form.querySelector('button[type="submit"]');
       if (submitBtn) {
@@ -838,7 +838,7 @@ function initTWCModals() {
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
           </svg>
-          Connecting to PesaPal...
+          Connecting to PesaPal (KES 10)...
         `;
       }
 
