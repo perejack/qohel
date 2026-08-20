@@ -1,18 +1,24 @@
 // Vercel Serverless API Route: POST /api/status or GET /api/status?orderTrackingId=...
-const rawBase = process.env.PESAPAL_BASE_URL || "https://pay.pesapal.com/v3";
-const BASE = rawBase.endsWith("/api") ? rawBase : rawBase.replace(/\/$/, "") + "/api";
+const axios = require("axios");
 
-async function getToken(key, secret) {
-  const res = await fetch(BASE + "/Auth/RequestToken", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Accept: "application/json" },
-    body: JSON.stringify({ consumer_key: key, consumer_secret: secret }),
-  });
-  const json = await res.json();
-  if (!json.token) {
-    throw new Error(json.error?.message || json.message || "Could not authenticate with Pesapal");
+const BASE = "https://pay.pesapal.com/v3/api";
+
+const PESAPAL_KEY    = process.env.PESAPAL_CONSUMER_KEY    || "gQSstjnS/AotrkwJMev+Rv1T2RCfxwxC";
+const PESAPAL_SECRET = process.env.PESAPAL_CONSUMER_SECRET || "gUQNgRFiFG/gygGoj1T69hJjiO0=";
+
+async function getToken() {
+  try {
+    const { data } = await axios.post(
+      BASE + "/Auth/RequestToken",
+      { consumer_key: PESAPAL_KEY, consumer_secret: PESAPAL_SECRET },
+      { headers: { "Content-Type": "application/json", Accept: "application/json" } }
+    );
+    if (!data.token) throw new Error(data.error?.message || data.message || "No token returned");
+    return data.token;
+  } catch (err) {
+    console.error("[PesaPal Auth Error]:", err.response?.data || err.message);
+    throw new Error("Could not authenticate with Pesapal: " + (err.response?.data?.message || err.message));
   }
-  return json.token;
 }
 
 module.exports = async function handler(req, res) {
@@ -40,22 +46,15 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ success: false, error: "Missing orderTrackingId parameter" });
     }
 
-    const key = process.env.PESAPAL_CONSUMER_KEY || "gQSstjnS/AotrkwJMev+Rv1T2RCfxwxC";
-    const secret = process.env.PESAPAL_CONSUMER_SECRET || "gUQNgRFiFG/gygGoj1T69hJjiO0=";
-
-    if (!key || !secret) {
-      return res.status(500).json({ success: false, error: "Pesapal credentials are not configured" });
-    }
-
-    const token = await getToken(key, secret);
-    const statusRes = await fetch(
+    const token = await getToken();
+    const statusRes = await axios.get(
       BASE + "/Transactions/GetTransactionStatus?orderTrackingId=" + encodeURIComponent(orderTrackingId),
       {
         headers: { Accept: "application/json", Authorization: "Bearer " + token },
       }
     );
 
-    const raw = await statusRes.json();
+    const raw = statusRes.data;
     const statusDesc = raw.payment_status_description || raw.paymentStatusDescription || raw.status || "PENDING";
     const statusCode = raw.status_code ?? raw.statusCode ?? -1;
     const confirmationCode = raw.confirmation_code || raw.confirmationCode || "";
@@ -75,10 +74,11 @@ module.exports = async function handler(req, res) {
       description: raw.description || "",
     });
   } catch (error) {
-    console.error("Status error:", error);
+    console.error("Status error:", error.response?.data || error.message);
     return res.status(500).json({
       success: false,
-      error: error.message || "Failed to check status",
+      error: error.response?.data?.message || error.message || "Failed to check status",
     });
   }
 };
+
