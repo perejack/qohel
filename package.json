@@ -4,6 +4,7 @@
   "description": "QOHEL AFRICA GROUP — Sovereign Corporate Platform with PesaPal M-Pesa Payment",
   "main": "server.js",
   "scripts": {
+    "build": "echo 'Build complete'",
     "start": "node server.js",
     "dev": "node server.js"
   },

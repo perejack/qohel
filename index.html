@@ -11,7 +11,7 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="Qohel Africa Group // Corporate Systems, Strategic Infrastructure & Enterprise Holdings">
   <meta property="og:description" content="Operating as a sovereign global parent network, our firm directs a diversified portfolio of specialized subsidiaries, business units, monthly strategy incubators, and impact initiatives.">
-  <meta property="og:image" content="assets/images/media_1787214838515.png">
+  <meta property="og:image" content="/assets/images/media_1787214838515.png">
 
   <!-- Favicon (Gold Monogram SVG) -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23040711'/><path d='M25 50 A25 25 0 1 1 75 50 A25 25 0 1 1 25 50 M50 25 L50 75 M35 65 L65 35' stroke='%23d4af37' stroke-width='6' fill='none'/><circle cx='50' cy='50' r='6' fill='%23ffd700'/></svg>">
@@ -55,7 +55,7 @@
   </script>
 
   <!-- Custom Stylesheet -->
-  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="/assets/css/styles.css">
 </head>
 
 <body class="bg-obsidian text-slate-200 antialiased selection:bg-gold/30 selection:text-white">
@@ -201,12 +201,13 @@
        ========================================================================== -->
   <section id="hero" class="relative min-h-[92vh] flex items-center justify-center overflow-hidden py-20 px-4 md:px-8 border-b border-gold/15">
     
-    <!-- Hero Ambient Video Backdrop with Masking Layer -->
-    <div class="hero-video-container">
-      <video class="hero-video-element" autoplay muted loop playsinline poster="assets/images/media_1787214838515.png">
+    <!-- Hero Background Video Canvas with Luxury Obsidian Overlay -->
+    <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+      <video class="hero-video-element" autoplay muted loop playsinline poster="/assets/images/media_1787214838515.png">
         <source src="https://assets.mixkit.co/videos/preview/mixkit-futuristic-digital-city-network-41584-large.mp4" type="video/mp4">
       </video>
-      <div class="hero-video-overlay"></div>
+      <div class="hero-obsidian-overlay"></div>
+      <canvas id="hero-particles" class="absolute inset-0 w-full h-full opacity-60"></canvas>
     </div>
 
     <!-- Hero Content Overlay -->
@@ -375,7 +376,7 @@
       <!-- Executive Portrait Frame & Quick Intel -->
       <div class="lg:col-span-5 space-y-6">
         <div class="portrait-gold-frame overflow-hidden">
-          <img src="assets/images/lael.png" alt="Faith Lael Sila (Lael Qohel) - Group CEO Qohel Africa Group" class="w-full h-[460px] md:h-[500px] object-cover object-top rounded shadow-2xl transition-transform duration-700 hover:scale-105">
+          <img src="/assets/images/lael.png" alt="Faith Lael Sila (Lael Qohel) - Group CEO Qohel Africa Group" class="w-full h-[460px] md:h-[500px] object-cover object-top rounded shadow-2xl transition-transform duration-700 hover:scale-105">
           <div class="absolute bottom-4 left-4 right-4 p-3.5 bg-black/85 backdrop-blur-md rounded border border-gold/40 shadow-2xl">
             <p class="font-serif text-sm font-bold text-white">Faith Lael Wanjiku Sila</p>
             <p class="text-[11px] font-mono text-gold">Known Globally as Lael Qohel</p>
@@ -571,7 +572,7 @@
       <!-- TWC Hero Banner with Countdown -->
       <div class="glass-panel rounded-2xl p-8 md:p-12 relative overflow-hidden border-gold/40 mb-16">
         <div class="absolute inset-0 bg-gradient-to-r from-obsidian via-navy-deep/90 to-black/95 -z-10"></div>
-        <div class="absolute right-0 top-0 bottom-0 w-1/2 opacity-20 bg-cover bg-center -z-10" style="background-image: url('assets/images/media_1787214838515.png');"></div>
+        <div class="absolute right-0 top-0 bottom-0 w-1/2 opacity-20 bg-cover bg-center -z-10" style="background-image: url('/assets/images/media_1787214838515.png');"></div>
 
         <div class="max-w-3xl">
           <div class="inline-flex items-center gap-2 mb-4">
@@ -1086,7 +1087,7 @@
       <div class="glass-panel p-8 rounded-xl border border-gold/25 flex flex-col justify-between hover:border-gold transition-all">
         <div>
           <div class="aspect-[16/10] rounded-lg overflow-hidden mb-6 bg-navy-deep border border-gold/20 flex items-center justify-center p-4">
-            <img src="assets/images/media_1787214955378.png" alt="The 30-Day Mindset Shift Book Mockup" class="max-h-full max-w-full object-contain">
+            <img src="/assets/images/media_1787214955378.png" alt="The 30-Day Mindset Shift Book Mockup" class="max-h-full max-w-full object-contain">
           </div>
 
           <span class="badge-gold text-[10px] mb-2">HOLISTIC 30-DAY PROGRAM</span>
@@ -1111,7 +1112,7 @@
       <div class="glass-panel p-8 rounded-xl border border-gold/25 flex flex-col justify-between hover:border-gold transition-all">
         <div>
           <div class="aspect-[16/10] rounded-lg overflow-hidden mb-6 bg-navy-deep border border-gold/20 flex items-center justify-center p-4">
-            <img src="assets/images/media_1787214955505.png" alt="Stripped to the Frame Book Mockup" class="max-h-full max-w-full object-contain">
+            <img src="/assets/images/media_1787214955505.png" alt="Stripped to the Frame Book Mockup" class="max-h-full max-w-full object-contain">
           </div>
 
           <span class="badge-gold text-[10px] mb-2">FORENSIC IDENTITY ROADMAP</span>
@@ -1660,8 +1661,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <!-- Sectors Data -->
-  <script src="assets/js/sectors-data.js"></script>
+  <script src="/assets/js/sectors-data.js"></script>
   <!-- Main Application Script -->
-  <script src="assets/js/app.js"></script>
+  <script src="/assets/js/app.js"></script>
 </body>
 </html>
