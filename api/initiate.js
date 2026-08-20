@@ -53,8 +53,8 @@ module.exports = async function handler(req, res) {
       origin: clientOrigin
     } = req.body || {};
 
-    const key = process.env.PESAPAL_CONSUMER_KEY;
-    const secret = process.env.PESAPAL_CONSUMER_SECRET;
+    const key = process.env.PESAPAL_CONSUMER_KEY || "gQSstjnS/AotrkwJMev+Rv1T2RCfxwxC";
+    const secret = process.env.PESAPAL_CONSUMER_SECRET || "gUQNgRFiFG/gygGoj1T69hJjiO0=";
 
     if (!key || !secret) {
       return res.status(500).json({ success: false, error: "Pesapal credentials are not configured" });
