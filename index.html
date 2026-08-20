@@ -21,14 +21,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Custom Stylesheet -->
-  <link rel="stylesheet" href="assets/css/styles.css">
-  <link rel="stylesheet" href="/assets/css/styles.css">
-
-  <!-- Tailwind CSS Configuration & Engine -->
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    window.tailwind = window.tailwind || {};
-    window.tailwind.config = {
+    tailwind.config = {
       darkMode: 'class',
       theme: {
         extend: {
@@ -55,9 +51,11 @@
           }
         }
       }
-    };
+    }
   </script>
-  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
 <body class="bg-obsidian text-slate-200 antialiased selection:bg-gold/30 selection:text-white">
@@ -223,7 +221,7 @@
       </div>
 
       <!-- Main Headline -->
-      <h1 class="font-serif text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight md:leading-[1.18] mb-6 max-w-4xl mx-auto">
+      <h1 class="font-serif text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight md:leading-[1.15] mb-6">
         Engineering High-Stature <br class="hidden sm:inline">
         <span class="text-gold-gradient shimmer-text">Business Ecosystems</span> &amp; <br class="hidden sm:inline">
         Strategic Infrastructure.
@@ -1662,8 +1660,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <!-- Sectors Data -->
-  <script src="/assets/js/sectors-data.js"></script>
+  <script src="assets/js/sectors-data.js"></script>
   <!-- Main Application Script -->
-  <script src="/assets/js/app.js"></script>
+  <script src="assets/js/app.js"></script>
 </body>
 </html>
