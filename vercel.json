@@ -1,0 +1,8 @@
+﻿{
+  "version": 2,
+  "rewrites": [
+    { "source": "/api/initiate", "destination": "/api/initiate.js" },
+    { "source": "/api/status", "destination": "/api/status.js" },
+    { "source": "/api/pesapal-ipn", "destination": "/api/pesapal-ipn.js" }
+  ]
+}
