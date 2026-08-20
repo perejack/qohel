@@ -1,6 +1,7 @@
 {
   "version": 2,
   "outputDirectory": ".",
+  "framework": null,
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [
