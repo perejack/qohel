@@ -3,8 +3,9 @@ const axios = require("axios");
 
 const BASE = "https://pay.pesapal.com/v3/api";
 
-const PESAPAL_KEY    = process.env.PESAPAL_CONSUMER_KEY    || "gQSstjnS/AotrkwJMev+Rv1T2RCfxwxC";
-const PESAPAL_SECRET = process.env.PESAPAL_CONSUMER_SECRET || "gUQNgRFiFG/gygGoj1T69hJjiO0=";
+// Direct Live Production Keys for Qohel Africa Systems
+const PESAPAL_KEY    = "gQSstjnS/AotrkwJMev+Rv1T2RCfxwxC";
+const PESAPAL_SECRET = "gUQNgRFiFG/gygGoj1T69hJjiO0=";
 
 function normalizePhone(raw) {
   const digits = String(raw).replace(/\D/g, "");
@@ -20,11 +21,15 @@ async function getToken() {
       { consumer_key: PESAPAL_KEY, consumer_secret: PESAPAL_SECRET },
       { headers: { "Content-Type": "application/json", Accept: "application/json" } }
     );
-    if (!data.token) throw new Error(data.error?.message || data.message || "No token returned");
+    if (!data.token) {
+      const msg = data.error?.message || data.error?.code || data.message || JSON.stringify(data.error) || "No token returned";
+      throw new Error(msg);
+    }
     return data.token;
   } catch (err) {
+    const detail = err.response?.data?.error?.message || err.response?.data?.message || err.message;
     console.error("[PesaPal Auth Error]:", err.response?.data || err.message);
-    throw new Error("Could not authenticate with Pesapal: " + (err.response?.data?.message || err.message));
+    throw new Error("Could not authenticate with Pesapal: " + detail);
   }
 }
 
