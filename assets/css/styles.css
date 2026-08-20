@@ -263,30 +263,94 @@ body {
   opacity: 0.65;
 }
 
-/* Video Backdrop Engine */
-.hero-video-container {
+/* ======================================================
+   CINEMATIC HERO VIDEO ENGINE
+   ====================================================== */
+
+/* Wrapper: full bleed, behind all content */
+.hero-video-container,
+[class*="absolute inset-0 z-0 overflow-hidden"] {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   overflow: hidden;
-  z-index: 1;
+  z-index: 0;
 }
 
+/* The video itself: fills frame, muted colour, cinematic look */
 .hero-video-element {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.28;
-  filter: contrast(1.15) brightness(0.7) saturate(0.85);
+  object-position: center center;
+
+  /* Colour treatment: desaturate to near-mono, deepen blacks, slight warmth boost */
+  opacity: 0.55;
+  filter:
+    contrast(1.25)
+    brightness(0.55)
+    saturate(0.45)
+    sepia(0.15);
+
+  /* Hardware acceleration */
+  will-change: opacity;
+  transform: scale(1.04); /* tiny over-scale removes edge flicker */
+  transition: opacity 1.2s ease;
 }
 
+/* Multi-layer composite overlay — provides:
+   1. Radial vignette (dark edges → readable centre)
+   2. Top-to-bottom gradient (header contrast + footer fade-in)
+   3. Obsidian colour tint wash (brand colour consistency)
+   4. Subtle gold warmth bloom at centre bottom
+*/
+.hero-obsidian-overlay,
 .hero-video-overlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at center, rgba(4, 7, 17, 0.5) 0%, rgba(4, 7, 17, 0.95) 75%, #040711 100%),
-              linear-gradient(180deg, rgba(4, 7, 17, 0.7) 0%, transparent 40%, rgba(4, 7, 17, 0.95) 90%, #040711 100%);
   pointer-events: none;
+  z-index: 1;
+
+  background:
+    /* 1 — Radial vignette: dark crushed edges, clear centre window */
+    radial-gradient(
+      ellipse 85% 75% at 50% 45%,
+      transparent 0%,
+      rgba(4, 7, 17, 0.30) 55%,
+      rgba(4, 7, 17, 0.80) 80%,
+      rgba(4, 7, 17, 0.97) 100%
+    ),
+
+    /* 2 — Top bar: ensure nav text always readable */
+    linear-gradient(
+      180deg,
+      rgba(4, 7, 17, 0.82) 0%,
+      rgba(4, 7, 17, 0.10) 18%,
+      transparent 35%,
+
+      /* 3 — Bottom fade: content flows into page smoothly */
+      transparent 62%,
+      rgba(4, 7, 17, 0.70) 82%,
+      rgba(4, 7, 17, 0.98) 100%
+    ),
+
+    /* 4 — Obsidian blue tint wash — keeps brand palette intact */
+    linear-gradient(
+      135deg,
+      rgba(4, 7, 17, 0.50) 0%,
+      rgba(7, 12, 26, 0.25) 50%,
+      rgba(4, 7, 17, 0.50) 100%
+    ),
+
+    /* 5 — Gold bloom: faint warm glow at lower-centre (brand depth) */
+    radial-gradient(
+      ellipse 60% 30% at 50% 100%,
+      rgba(212, 175, 55, 0.06) 0%,
+      transparent 70%
+    );
 }
 
 /* Hero Content Stacking */
@@ -294,6 +358,8 @@ body {
   position: relative;
   z-index: 10;
 }
+
+
 
 /* Gold Shimmer Animations */
 @keyframes goldShimmer {
