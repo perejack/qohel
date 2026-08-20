@@ -826,5 +826,273 @@ body {
   color: var(--gold-light) !important;
 }
 
+/* ==========================================================================
+   AUTHENTIC LUXURY EVENT TICKET STYLES (TWC 2026 PASSES)
+   ========================================================================== */
+
+.twc-ticket-wrapper {
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+  perspective: 1000px;
+}
+
+.twc-ticket-card {
+  width: 100%;
+  min-height: 380px;
+  display: flex;
+  flex-direction: row;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 40px rgba(212, 175, 55, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  user-select: none;
+}
+
+@media (max-width: 768px) {
+  .twc-ticket-card {
+    flex-direction: column;
+    min-height: auto;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   STYLE 1: INSTITUTIONAL COHORT PASS (TEAL GRID MATRIX - 10 SCANS)
+   -------------------------------------------------------------------------- */
+.ticket-theme-corporate {
+  background: #041217;
+  border: 1px solid rgba(14, 165, 233, 0.3);
+}
+
+.ticket-theme-corporate .ticket-flank {
+  width: 22%;
+  min-width: 130px;
+  background: #090e14;
+  border-right: 1px solid rgba(14, 165, 233, 0.25);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 0.75rem;
+  text-align: center;
+  position: relative;
+}
+
+.ticket-theme-corporate .flank-rotated-text {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: 'Montserrat', sans-serif, -apple-system;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  color: #ffffff;
+  text-transform: uppercase;
+  margin: auto 0;
+}
+
+.ticket-theme-corporate .ticket-core {
+  flex: 1;
+  background: 
+    radial-gradient(circle at 50% 30%, rgba(14, 165, 233, 0.15), transparent 70%),
+    linear-gradient(rgba(14, 165, 233, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(14, 165, 233, 0.05) 1px, transparent 1px),
+    #05181e;
+  background-size: 100% 100%, 20px 20px, 20px 20px, 100% 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 1.25rem 0.75rem;
+  text-align: center;
+  position: relative;
+  border-right: 1px dashed rgba(14, 165, 233, 0.4);
+}
+
+.ticket-theme-corporate .ticket-dynamic-box {
+  width: 30%;
+  min-width: 200px;
+  background: #04080c;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.25rem 1rem;
+}
+
+/* --------------------------------------------------------------------------
+   STYLE 2: GENERAL ADMISSION DELEGATE PASS (SILVER METALLIC)
+   -------------------------------------------------------------------------- */
+.ticket-theme-delegate {
+  background: #080c11;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.ticket-theme-delegate .ticket-flank {
+  width: 22%;
+  min-width: 130px;
+  background: #111720;
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 0.75rem;
+  text-align: center;
+}
+
+.ticket-theme-delegate .flank-rotated-text {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: 'Cinzel', 'Playfair Display', serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  color: #ffffff;
+  text-transform: uppercase;
+  margin: auto 0;
+}
+
+.ticket-theme-delegate .ticket-core {
+  flex: 1;
+  background: linear-gradient(135deg, #ced5df 0%, #ffffff 35%, #e2e8f0 60%, #b4bfc9 100%);
+  color: #0f172a;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 1.25rem 0.75rem;
+  text-align: center;
+  position: relative;
+  border-right: 1px dashed rgba(15, 23, 42, 0.3);
+}
+
+.ticket-theme-delegate .ticket-core h2,
+.ticket-theme-delegate .ticket-core p,
+.ticket-theme-delegate .ticket-core span {
+  color: #0f172a;
+}
+
+.ticket-theme-delegate .ticket-dynamic-box {
+  width: 28%;
+  min-width: 190px;
+  background: #06090d;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.25rem 1rem;
+}
+
+/* --------------------------------------------------------------------------
+   STYLE 3: VIP EXECUTIVE PASS (OBSIDIAN FACETS & CRIMSON RIBBON)
+   -------------------------------------------------------------------------- */
+.ticket-theme-vip {
+  background: #070a0e;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+}
+
+.ticket-theme-vip .ticket-flank {
+  width: 10%;
+  min-width: 60px;
+  background: linear-gradient(180deg, #1e242c 0%, #0a0d12 100%);
+  border-right: 1px solid rgba(212, 175, 55, 0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0.75rem 0.25rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.ticket-theme-vip .hologram-seal {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(180,220,255,0.4), rgba(255,200,255,0.6), rgba(200,255,220,0.5));
+  border: 1px solid rgba(255,255,255,0.8);
+  box-shadow: 0 0 10px rgba(255,255,255,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 7px;
+  font-weight: 900;
+  color: #0b1118;
+  letter-spacing: 0.5px;
+}
+
+.ticket-theme-vip .ticket-core {
+  flex: 1;
+  background: 
+    linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+    radial-gradient(circle at 80% 20%, rgba(136, 19, 55, 0.25), transparent 50%),
+    linear-gradient(145deg, #0e131a 0%, #151c24 50%, #090c10 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 1.25rem 0.75rem;
+  text-align: center;
+  position: relative;
+  border-right: 1px dashed rgba(212, 175, 55, 0.3);
+}
+
+.ticket-theme-vip .vip-crimson-banner {
+  background: linear-gradient(90deg, #60071d 0%, #881337 50%, #60071d 100%);
+  border: 1px solid rgba(253, 224, 71, 0.5);
+  box-shadow: 0 4px 15px rgba(136, 19, 55, 0.6);
+  padding: 0.5rem 1.25rem;
+  border-radius: 4px;
+  color: #fef08a;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+.ticket-theme-vip .ticket-dynamic-box {
+  width: 32%;
+  min-width: 200px;
+  background: #05080c;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.25rem 1rem;
+}
+
+/* --------------------------------------------------------------------------
+   SHARED TICKET QR CODE CONTAINER
+   -------------------------------------------------------------------------- */
+.ticket-qr-frame {
+  background: #ffffff;
+  padding: 8px;
+  border-radius: 6px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  display: inline-block;
+  margin: 0 auto;
+}
+.ticket-qr-frame img,
+.ticket-qr-frame canvas {
+  display: block;
+  width: 100px !important;
+  height: 100px !important;
+}
+
+/* --------------------------------------------------------------------------
+   TICKET VERIFICATION MODAL STYLING
+   -------------------------------------------------------------------------- */
+#ticket-verify-modal .verify-radar-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  position: relative;
+}
+
+
 
 
