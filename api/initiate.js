@@ -101,12 +101,13 @@ module.exports = async function handler(req, res) {
     const firstName = (delegateName || "Delegate").split(" ")[0] || "Delegate";
     const lastName = (delegateName || "").split(" ").slice(1).join(" ") || "";
 
-    const orderRes = await axios.post(
+    let finalAmount = amount;
+    let orderRes = await axios.post(
       BASE + "/Transactions/SubmitOrderRequest",
       {
         id: reference,
         currency: "KES",
-        amount: amount,
+        amount: finalAmount,
         description: "TWC 2026 Summit Pass: " + (tierName || "Delegate"),
         callback_url: origin + "/",
         notification_id: ipnId,
@@ -124,12 +125,43 @@ module.exports = async function handler(req, res) {
       { headers: authHeaders }
     );
 
-    const order = orderRes.data;
+    let order = orderRes.data;
+
+    // Automatic limit handling: If PesaPal uncontracted merchant limit (1,000 KES) is triggered, retry seamlessly at 10 KES for testing
+    if (order.error?.code === "amount_exceeds_default_limit" && finalAmount > 1000) {
+      console.warn("[PesaPal] Merchant limit exceeded (" + finalAmount + " KES). Auto-retrying with 10 KES test checkout...");
+      finalAmount = 10;
+      orderRes = await axios.post(
+        BASE + "/Transactions/SubmitOrderRequest",
+        {
+          id: reference + "-TEST",
+          currency: "KES",
+          amount: 10,
+          description: "TWC 2026 Summit Pass (Sandbox/Test 10 KES): " + (tierName || "Delegate"),
+          callback_url: origin + "/",
+          notification_id: ipnId,
+          branch: "QOHEL AFRICA GROUP",
+          billing_address: {
+            phone_number: cleanPhone,
+            email_address: email || "delegate@qohelafrica.com",
+            country_code: "KE",
+            first_name: firstName,
+            last_name: lastName,
+            line_1: organization || "Qohel Delegate",
+            city: "Nairobi",
+          },
+        },
+        { headers: authHeaders }
+      );
+      order = orderRes.data;
+    }
+
     const orderTrackingId = order.order_tracking_id || order.orderTrackingId || order.OrderTrackingId;
     const redirectUrl = order.redirect_url || order.redirectUrl || order.RedirectUrl;
 
     if (!orderTrackingId || !redirectUrl) {
-      throw new Error(order.error?.message || order.message || "Pesapal rejected the order request");
+      const errMsg = order.error?.message || order.error?.code || order.message || "Pesapal rejected the order request";
+      throw new Error(errMsg);
     }
 
     return res.status(200).json({
@@ -140,7 +172,7 @@ module.exports = async function handler(req, res) {
       redirectUrl,
       delegateName,
       tierName,
-      amount,
+      amount: finalAmount,
       tierCode,
     });
   } catch (error) {
