@@ -222,22 +222,33 @@
         </span>
       </div>
 
-      <!-- Main Headline: exact user text, sized to fit the viewport -->
-      <h1 class="font-serif font-extrabold leading-[1.15] mb-5" style="font-size: clamp(1.5rem, 3.5vw, 2.75rem);">
+      <!-- Pre-line: White supporting statement -->
+      <p class="font-sans text-xs sm:text-sm font-semibold tracking-[0.25em] uppercase text-slate-300 mb-3">
+        Engineering High-Stature Business Ecosystems &amp; Strategic Infrastructure
+      </p>
+
+      <!-- Main Headline: Short, punchy, gold — fully visible above fold -->
+      <h1 class="font-serif font-extrabold leading-[1.1] mb-5" style="font-size: clamp(2rem, 5vw, 3.5rem);">
         <span style="background: linear-gradient(135deg, #c9a227 0%, #f5e17a 40%, #d4af37 70%, #fff2b2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
-          Building Africa's Most Powerful Tech and Media Ecosystems for High-Velocity Founders, Leaders, Multi-Sector Scale, and Borderless Market Dominance.
+          Africa's Most Powerful<br>
+          Tech &amp; Media Ecosystems
         </span>
       </h1>
 
-      <!-- Divider -->
-      <div class="w-16 h-px bg-gold/60 mx-auto mb-5"></div>
-
-      <!-- Body paragraph: exact user text -->
-      <p class="font-sans text-sm md:text-base text-slate-300 max-w-3xl mx-auto font-light leading-relaxed mb-8">
-        We deploy data-backed closed-loop frameworks and visual status engineering to dismantle operational chaos for overburdened enterprise builders. Through high-altitude storytelling, custom software infrastructure, and elite economic summits, we systematically scale Africa's next generation of corporate leaders into unassailable seven-figure market authority.
+      <!-- Sub-headline: The "for whom" — smaller, white -->
+      <p class="font-serif text-base sm:text-lg md:text-xl text-slate-200 italic max-w-2xl mx-auto mb-4">
+        For High-Velocity Founders, Multi-Sector Leaders &amp; Borderless Market Dominance.
       </p>
 
-      <!-- Primary Action Buttons -->
+      <!-- Divider line -->
+      <div class="w-16 h-px bg-gold/60 mx-auto mb-5"></div>
+
+      <!-- Body copy -->
+      <p class="font-sans text-sm sm:text-sm text-slate-300 max-w-2xl mx-auto font-light leading-relaxed mb-8">
+        We deploy data-backed closed-loop frameworks and visual status engineering to dismantle operational chaos for enterprise builders — scaling Africa's next generation of corporate leaders into unassailable seven-figure market authority.
+      </p>
+
+      <!-- Primary Action Buttons — always visible above fold -->
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
         <a href="#twc" class="btn-gold w-full sm:w-auto px-8 py-4 text-sm font-bold shadow-2xl inline-flex items-center justify-center gap-2">
           <span>Partner for TWC 2026</span>
@@ -2423,44 +2434,63 @@
         </form>
       </div>
 
-      <!-- STEP 2: PesaPal Embedded Iframe & STK Verification -->
-      <div id="twc-step-waiting" class="hidden space-y-4">
-        <div class="flex items-center justify-between">
+      <!-- STEP 2: PayHero Direct M-Pesa STK Push Verification -->
+      <div id="twc-step-waiting" class="hidden space-y-5">
+        <div class="flex items-center justify-between border-b border-gold/20 pb-3">
           <div>
-            <span class="badge-gold text-[10px] mb-1">M-PESA / PESAPAL GATEWAY</span>
+            <span class="badge-gold text-[10px] mb-1">M-PESA STK PUSH // CHANNEL 11757</span>
             <p class="text-xs text-slate-300">
-              Payment prompt for <strong id="twc-waiting-phone" class="text-gold"></strong>
+              Prompt sent to <strong id="twc-waiting-phone" class="text-gold font-mono"></strong>
             </p>
           </div>
-          <span id="twc-poll-countdown" class="font-mono text-xs text-gold">5:00</span>
+          <div class="text-right">
+            <span class="text-[10px] font-mono text-slate-400 block">EXPIRES IN</span>
+            <span id="twc-poll-countdown" class="font-mono text-sm font-bold text-gold">5:00</span>
+          </div>
         </div>
 
-        <!-- Embedded PesaPal Checkout Iframe -->
-        <div id="twc-iframe-container" class="w-full rounded-lg overflow-hidden border border-gold/30 bg-black/80">
-          <iframe id="twc-pesapal-iframe" src="" title="Pesapal Gateway" class="w-full h-[440px] md:h-[480px] border-0 bg-white"></iframe>
-        </div>
+        <!-- STK Push Instructions Card -->
+        <div class="p-6 rounded-xl bg-gradient-to-b from-navy-card to-obsidian border border-gold/30 text-center space-y-4 shadow-xl">
+          <div class="w-16 h-16 rounded-full bg-emerald-500/10 border-2 border-emerald-500/40 flex items-center justify-center mx-auto text-emerald-400">
+            <svg class="w-8 h-8 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+            </svg>
+          </div>
 
-        <!-- Verification controls -->
-        <div class="p-3 bg-navy-deep rounded border border-gold/20 flex flex-wrap items-center justify-between gap-3">
-          <div class="flex items-center gap-2">
+          <div>
+            <h4 class="font-serif text-xl font-bold text-white mb-1">Enter Your M-Pesa PIN</h4>
+            <p class="text-xs text-slate-300 max-w-md mx-auto leading-relaxed">
+              A payment prompt from <strong class="text-white">PayHero / QOHEL AFRICA</strong> has been dispatched to your mobile phone. Enter your PIN on your phone to complete authorization.
+            </p>
+          </div>
+
+          <div class="flex items-center justify-center gap-2 pt-2">
             <span class="relative flex h-3 w-3">
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
             </span>
-            <span id="twc-status-feedback" class="text-xs font-mono text-slate-300">Auto-checking status every 3s...</span>
+            <span id="twc-status-feedback" class="text-xs font-mono text-emerald-300">Listening for M-Pesa confirmation...</span>
           </div>
-
-          <button type="button" id="twc-check-status-btn" class="btn-gold text-xs py-2 px-4 flex items-center gap-2">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-            Verify Payment Status
-          </button>
         </div>
 
-        <div class="flex items-center justify-between text-[10px] font-mono text-slate-500 pt-1">
-          <span>Ref: <span id="twc-order-ref-display" class="text-slate-300"></span></span>
-          <button type="button" id="twc-cancel-payment" class="text-slate-400 hover:text-red-400 underline underline-offset-2">
-            Cancel &amp; Restart
-          </button>
+        <!-- Hidden iframe container kept for fallback compatibility -->
+        <iframe id="twc-pesapal-iframe" src="" title="Gateway" class="hidden"></iframe>
+
+        <!-- Verification controls -->
+        <div class="p-3 bg-navy-deep rounded border border-gold/20 flex flex-wrap items-center justify-between gap-3">
+          <span class="text-[11px] font-mono text-slate-400">
+            Reference: <strong id="twc-order-ref-display" class="text-gold"></strong>
+          </span>
+
+          <div class="flex items-center gap-3">
+            <button type="button" id="twc-check-status-btn" class="btn-gold text-xs py-2 px-4 flex items-center gap-2">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              Check Status
+            </button>
+            <button type="button" id="twc-cancel-payment" class="text-xs text-slate-400 hover:text-red-400 underline underline-offset-2">
+              Cancel
+            </button>
+          </div>
         </div>
       </div>
 

@@ -11,6 +11,10 @@ const initiateHandler = require('./api/initiate');
 const statusHandler = require('./api/status');
 const ipnHandler = require('./api/pesapal-ipn');
 
+// PayHero STK Push handlers (M-Pesa direct — Channel 11757)
+const payheroInitiateHandler = require('./api/payhero-initiate');
+const payheroStatusHandler = require('./api/payhero-status');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -45,6 +49,13 @@ app.all('/api/payment/status/:id', (req, res) => {
 
 app.all('/api/pesapal-ipn', adapt(ipnHandler));
 app.all('/api/public/pesapal-ipn', adapt(ipnHandler));
+
+// PayHero STK Push Routes (M-Pesa direct — Channel 11757)
+app.all('/api/payhero/initiate', adapt(payheroInitiateHandler));
+app.all('/api/payhero-initiate', adapt(payheroInitiateHandler));
+
+app.all('/api/payhero/status', adapt(payheroStatusHandler));
+app.all('/api/payhero-status', adapt(payheroStatusHandler));
 
 // In-memory / cache ticket registry (with auto-sync)
 const ticketRegistry = new Map();

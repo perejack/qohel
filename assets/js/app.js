@@ -1047,15 +1047,15 @@ function initTWCModals() {
     if (countdownInterval) { clearInterval(countdownInterval); countdownInterval = null; }
   }
 
-  /* ---------- Form submit → Initiate PesaPal Order & Show Iframe ---------- */
+  /* ---------- Form submit → PayHero STK Push → Poll Status ---------- */
   const form = document.getElementById('twc-pass-form');
   if (form) {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const delegateName = document.getElementById('twc-name').value.trim();
-      const email = document.getElementById('twc-email').value.trim();
-      const phone = document.getElementById('twc-phone').value.trim();
+      const email        = document.getElementById('twc-email').value.trim();
+      const phone        = document.getElementById('twc-phone').value.trim();
       const organization = document.getElementById('twc-org').value.trim();
 
       if (!delegateName || !email || !phone || !organization) {
@@ -1074,12 +1074,13 @@ function initTWCModals() {
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
           </svg>
-          Connecting to PesaPal...
+          Sending M-Pesa Prompt...
         `;
       }
 
       try {
-        const response = await fetch('/api/initiate', {
+        // 1. Trigger PayHero STK Push
+        const response = await fetch('/api/payhero/initiate', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -1090,54 +1091,51 @@ function initTWCModals() {
             tierName: currentTierName,
             tierPrice: amount,
             tierCode: currentTierCode,
-            origin: window.location.origin
+            description: `TWC 2026 Pass: ${currentTierName}`,
           })
         });
 
         const data = await response.json();
 
-        if (!response.ok || !data.success || !data.redirectUrl) {
-          throw new Error(data.error || data.message || 'Payment initiation failed');
+        if (!response.ok || !data.success || !data.checkoutId) {
+          throw new Error(data.message || data.error || 'STK push failed');
         }
 
-        currentOrderTrackingId = data.orderTrackingId;
+        // 2. Store checkout reference for polling
+        currentOrderTrackingId = data.checkoutId;
         currentOrderRef = data.reference;
         currentOrderData = {
           delegateName,
           email,
-          phone: data.phone || phone,
+          phone: data.normalizedPhone || phone,
           organization,
           tierName: currentTierName,
           tierPrice: amount,
           tierCode: currentTierCode,
           orderRef: data.reference,
-          orderTrackingId: data.orderTrackingId
+          checkoutId: data.checkoutId,
         };
 
         playSuccessChime();
 
-        // Update waiting screen labels
+        // 3. Update waiting screen
         const waitingPhone = document.getElementById('twc-waiting-phone');
-        if (waitingPhone) waitingPhone.textContent = data.phone || phone;
+        if (waitingPhone) waitingPhone.textContent = phone;
 
         const orderRefDisplay = document.getElementById('twc-order-ref-display');
         if (orderRefDisplay) orderRefDisplay.textContent = data.reference;
 
-        // Load PesaPal iframe
+        // 4. Hide PesaPal iframe if present (not needed for PayHero)
         const iframe = document.getElementById('twc-pesapal-iframe');
-        if (iframe) {
-          iframe.src = data.redirectUrl;
-        }
+        if (iframe) iframe.style.display = 'none';
 
-        // Switch to waiting/iframe step
+        // 5. Show waiting step & start polling
         showStep(stepWaiting);
-
-        // Start polling & countdown
-        startStatusPolling(data.orderTrackingId, currentOrderData);
+        startStatusPolling(data.checkoutId, currentOrderData);
 
       } catch (err) {
-        console.error('Payment initiation error:', err);
-        alert(`Payment Initialization Error: ${err.message}\n\nPlease verify network connection and try again.`);
+        console.error('PayHero STK error:', err);
+        alert(`M-Pesa Prompt Failed: ${err.message}\n\nPlease check your phone number is a valid Safaricom number and try again.`);
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
@@ -1150,16 +1148,16 @@ function initTWCModals() {
     });
   }
 
-  /* ---------- Check Payment Status on Demand ---------- */
+  /* ---------- Check Payment Status on Demand (PayHero STK) ---------- */
   async function checkPaymentStatus(orderTrackingId, orderMeta, isManual = false) {
     const feedbackEl = document.getElementById('twc-status-feedback');
-    if (feedbackEl && isManual) feedbackEl.textContent = 'Checking PesaPal status...';
+    if (feedbackEl && isManual) feedbackEl.textContent = 'Checking M-Pesa status...';
 
     try {
-      const res = await fetch(`/api/status?orderTrackingId=${encodeURIComponent(orderTrackingId)}`);
+      const res = await fetch(`/api/payhero/status?checkoutId=${encodeURIComponent(orderTrackingId)}`);
       const data = await res.json();
 
-      if (data.status === 'COMPLETED') {
+      if (data.status === 'COMPLETED' || data.state === 'paid' || data.success === true) {
         stopPolling();
         playSuccessChime();
 

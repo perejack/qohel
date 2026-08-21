@@ -37,13 +37,17 @@
   ],
   "rewrites": [
     { "source": "/api/payment/initiate", "destination": "/api/initiate" },
-    { "source": "/api/payment/status", "destination": "/api/status" },
+    { "source": "/api/payment/status",   "destination": "/api/status" },
     { "source": "/api/public/pesapal-ipn", "destination": "/api/pesapal-ipn" },
+
+    { "source": "/api/payhero/initiate", "destination": "/api/payhero-initiate" },
+    { "source": "/api/payhero/status",   "destination": "/api/payhero-status" },
+
     { "source": "/ticket/:id", "destination": "/ticket.html" },
-    { "source": "/ticket", "destination": "/ticket.html" },
+    { "source": "/ticket",     "destination": "/ticket.html" },
     { "source": "/verify/:id", "destination": "/verify.html" },
-    { "source": "/verify", "destination": "/verify.html" },
-    { "source": "/dossier/:id", "destination": "/dossier.html" },
-    { "source": "/dossier", "destination": "/dossier.html" }
+    { "source": "/verify",     "destination": "/verify.html" },
+    { "source": "/dossier/:id","destination": "/dossier.html" },
+    { "source": "/dossier",    "destination": "/dossier.html" }
   ]
 }
