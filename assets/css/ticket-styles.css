@@ -1,0 +1,91 @@
+/* ==========================================================================
+   TWC 2026 LUXURY TICKET DESIGN SYSTEM & STYLES (MATCHING REFERENCE 1:1)
+   ========================================================================== */
+
+:root {
+  --ticket-gold: #d4af37;
+  --ticket-gold-deep: #a88420;
+  --ticket-gold-pale: #fbf0b9;
+  --ticket-ink: #0b1121;
+  --ticket-vip-wine: #581c24;
+  --ticket-teal-deep: #0f363b;
+
+  --gradient-gold: linear-gradient(135deg, #a88420 0%, #fbf0b9 45%, #d4af37 100%);
+  --gradient-silver: linear-gradient(160deg, #f8fafc 0%, #cbd5e1 45%, #f1f5f9 100%);
+  --gradient-ink: linear-gradient(150deg, #131b2e 0%, #060911 100%);
+  --gradient-teal: linear-gradient(160deg, #0e3d43 0%, #06191c 100%);
+  --shadow-lux: 0 24px 60px -20px rgba(0, 0, 0, 0.8), 0 0 30px rgba(212, 175, 55, 0.15);
+}
+
+.text-gradient-gold {
+  background: var(--gradient-gold);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+}
+
+.text-gradient-silver {
+  background: var(--gradient-silver);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+}
+
+.bg-gradient-gold {
+  background: var(--gradient-gold);
+}
+
+.bg-gradient-silver {
+  background: var(--gradient-silver);
+}
+
+.bg-gradient-ink {
+  background: var(--gradient-ink);
+}
+
+.bg-gradient-teal {
+  background: var(--gradient-teal);
+}
+
+.shadow-lux {
+  box-shadow: var(--shadow-lux);
+}
+
+.vertical-rl {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.grid-mesh {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 14px 14px;
+}
+
+.ticket-card {
+  min-height: 280px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ticket-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.9), 0 0 40px rgba(212, 175, 55, 0.25);
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #ticket-print, #ticket-print * {
+    visibility: visible;
+  }
+  #ticket-print {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 20px;
+  }
+}

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your TWC 2026 Summit Pass — QOHEL Africa Group</title>
+  <meta name="description" content="Your generated Wealth Convergence 2026 credential with a unique transaction ID and scannable QR verification code.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Montserrat:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Custom Stylesheets -->
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <link rel="stylesheet" href="/assets/css/ticket-styles.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: '#d4af37',
+            'gold-light': '#f5e3a3',
+            'gold-dark': '#8a7122',
+            obsidian: '#020408',
+            'navy-deep': '#040711',
+            'navy-card': '#0b1121'
+          },
+          fontFamily: {
+            serif: ['Cinzel', 'Cormorant Garamond', 'serif'],
+            sans: ['Montserrat', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-obsidian text-slate-100 min-h-screen flex flex-col justify-between selection:bg-gold selection:text-obsidian font-sans">
+
+  <!-- Header -->
+  <header class="border-b border-gold/20 bg-navy-deep/80 backdrop-blur sticky top-0 z-30">
+    <div class="max-w-6xl mx-auto flex items-center justify-between px-6 py-4">
+      <a href="/" class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-full border-2 border-gold flex items-center justify-center text-gold font-bold text-xs tracking-tight">
+          QAG
+        </div>
+        <div>
+          <p class="font-serif text-lg tracking-[0.2em] text-white font-bold">QOHEL</p>
+          <p class="text-[9px] tracking-[0.28em] text-gold uppercase">
+            Africa Group · Corporate Systems
+          </p>
+        </div>
+      </a>
+
+      <div class="flex items-center gap-3">
+        <a href="/verify" class="inline-flex items-center gap-2 rounded-md border border-gold/40 px-4 py-2 text-xs font-semibold tracking-[0.15em] text-gold uppercase transition-colors hover:bg-gold/10">
+          <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
+          <span>Gate Scanner</span>
+        </a>
+        <a href="/" class="text-xs font-mono text-slate-300 hover:text-gold uppercase tracking-wider">
+          Return to Portal
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-6 py-10 sm:py-14">
+    
+    <!-- Loading State -->
+    <div id="ticket-loading" class="text-center py-20">
+      <div class="w-12 h-12 border-2 border-gold border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+      <p class="font-mono text-sm text-gold tracking-widest uppercase">Retrieving credential docket...</p>
+    </div>
+
+    <!-- Not Found State -->
+    <div id="ticket-not-found" class="hidden text-center py-20">
+      <div class="w-16 h-16 rounded-full bg-red-950/60 border border-red-500 flex items-center justify-center mx-auto mb-4 text-red-400">
+        <svg class="size-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </div>
+      <h1 class="font-serif text-3xl text-white mb-2 font-bold">Pass Not Found On This Device</h1>
+      <p class="text-sm text-slate-400 max-w-md mx-auto mb-8">
+        The requested credential isn't cached locally in this browser. Please ensure you open the link on the device used at checkout or re-enter your credential ID.
+      </p>
+      <a href="/" class="btn-gold text-xs px-6 py-3 font-bold uppercase tracking-wider">
+        Back to Pass Selection
+      </a>
+    </div>
+
+    <!-- Ready State -->
+    <div id="ticket-ready" class="hidden">
+      
+      <!-- Payment Confirmation Banner -->
+      <div class="flex items-center gap-3.5 mb-8 pb-6 border-b border-gold/20">
+        <div class="w-10 h-10 rounded-full bg-emerald-500/20 border border-emerald-500 flex items-center justify-center text-emerald-400 shrink-0">
+          <svg class="size-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+        </div>
+        <div>
+          <h1 class="font-serif text-2xl sm:text-3xl text-white font-bold">Payment Confirmed · Pass Minted</h1>
+          <p class="text-xs font-mono tracking-widest text-slate-400 uppercase mt-0.5" id="ticket-meta-headline">
+            M-PESA REF <span id="meta-tx-ref" class="text-gold"></span> · <span id="meta-amount" class="text-emerald-400"></span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Live Printable Ticket Card Container -->
+      <div class="mb-8" id="ticket-print">
+        <div id="ticket-card-slot"></div>
+      </div>
+
+      <!-- Action Buttons Row -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+        <button onclick="window.print()" class="btn-gold text-xs py-3.5 px-4 font-bold tracking-widest uppercase flex items-center justify-center gap-2 shadow-xl cursor-pointer">
+          <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+          <span>Print / Save PDF</span>
+        </button>
+
+        <a id="btn-test-qr" href="#" class="btn-outline-gold text-xs py-3.5 px-4 font-bold tracking-widest uppercase flex items-center justify-center gap-2">
+          <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span>Test QR Verification</span>
+        </a>
+
+        <a href="/#twc-passes" class="btn-outline-gold text-xs py-3.5 px-4 font-bold tracking-widest uppercase flex items-center justify-center gap-2">
+          <span>Acquire Another Pass</span>
+        </a>
+      </div>
+
+      <!-- Advisory Footnote -->
+      <div class="p-4 rounded-lg bg-navy-deep border border-gold/20 text-xs text-slate-400 font-mono space-y-1">
+        <p class="text-gold font-bold">GATE ADMISSION POLICY:</p>
+        <p id="ticket-scan-policy-note">
+          Scanning the QR code opens the live verification endpoint. Valid for venue admission — scan attempts beyond the allocated quota are automatically rejected.
+        </p>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gold/20 py-6 text-center text-xs font-mono text-slate-500 bg-black">
+    <p>&copy; 2026 QOHEL AFRICA GROUP · The Wealth Convergence Convocation. All Rights Reserved.</p>
+  </footer>
+
+  <!-- QR & Ticket Engine Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="/assets/js/tickets.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      let ticketId = urlParams.get('id');
+
+      if (!ticketId) {
+        const parts = window.location.pathname.split('/');
+        ticketId = parts[parts.length - 1];
+        if (ticketId === 'ticket' || ticketId === 'ticket.html') ticketId = null;
+      }
+
+      const loadingEl = document.getElementById('ticket-loading');
+      const notFoundEl = document.getElementById('ticket-not-found');
+      const readyEl = document.getElementById('ticket-ready');
+      const slotEl = document.getElementById('ticket-card-slot');
+
+      if (!ticketId) {
+        loadingEl.classList.add('hidden');
+        notFoundEl.classList.remove('hidden');
+        return;
+      }
+
+      const ticket = await window.QAG_TICKETS.findTicketAsync(ticketId);
+
+      if (!ticket) {
+        loadingEl.classList.add('hidden');
+        notFoundEl.classList.remove('hidden');
+        return;
+      }
+
+      // Populate Meta
+      document.getElementById('meta-tx-ref').textContent = ticket.transactionId || 'CONFIRMED';
+      document.getElementById('meta-amount').textContent = window.QAG_TICKETS.formatKsh(ticket.amount);
+
+      const policyNote = document.getElementById('ticket-scan-policy-note');
+      if (policyNote) {
+        policyNote.textContent = ticket.seats === 1
+          ? 'Scanning the QR code opens the gate verification endpoint. This credential admits one delegate once — scan attempts beyond 1 are rejected.'
+          : `Scanning the QR code opens the gate verification endpoint. This master corporate pass admits up to ${ticket.seats} scans — scan attempts beyond ${ticket.seats} are rejected.`;
+      }
+
+      const verifyUrl = `${window.location.origin}/verify/${encodeURIComponent(ticket.id)}`;
+      const testBtn = document.getElementById('btn-test-qr');
+      if (testBtn) testBtn.href = `/verify/${encodeURIComponent(ticket.id)}`;
+
+      // Render Visual Card HTML
+      const html = await window.QAG_TICKETS.renderTicketCardHTML(ticket, verifyUrl);
+      slotEl.innerHTML = html;
+
+      loadingEl.classList.add('hidden');
+      readyEl.classList.remove('hidden');
+    });
+  </script>
+</body>
+</html>

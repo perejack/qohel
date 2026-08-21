@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pass Verification — TWC 2026 Gate Control | QOHEL Africa Group</title>
+  <meta name="description" content="Live verification endpoint for The Wealth Convergence 2026 credentials, tracking remaining admission scans.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Montserrat:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Custom Stylesheets -->
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <link rel="stylesheet" href="/assets/css/ticket-styles.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: '#d4af37',
+            'gold-light': '#f5e3a3',
+            'gold-dark': '#8a7122',
+            obsidian: '#020408',
+            'navy-deep': '#040711',
+            'navy-card': '#0b1121'
+          },
+          fontFamily: {
+            serif: ['Cinzel', 'Cormorant Garamond', 'serif'],
+            sans: ['Montserrat', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-obsidian text-slate-100 min-h-screen flex flex-col justify-between selection:bg-gold selection:text-obsidian font-sans">
+
+  <!-- Header -->
+  <header class="border-b border-gold/20 bg-navy-deep/80 backdrop-blur sticky top-0 z-30">
+    <div class="max-w-6xl mx-auto flex items-center justify-between px-6 py-4">
+      <a href="/" class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-full border-2 border-gold flex items-center justify-center text-gold font-bold text-xs tracking-tight">
+          QAG
+        </div>
+        <div>
+          <p class="font-serif text-lg tracking-[0.2em] text-white font-bold">QOHEL</p>
+          <p class="text-[9px] tracking-[0.28em] text-gold uppercase">
+            Gate Control &amp; Telemetry
+          </p>
+        </div>
+      </a>
+
+      <a href="/" class="text-xs font-mono text-slate-300 hover:text-gold uppercase tracking-wider">
+        Return to Portal
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Gate Container -->
+  <main class="flex-1 flex items-center justify-center px-4 sm:px-6 py-12">
+    <div class="w-full max-w-lg">
+      
+      <!-- MODE 1: Verification Result Card (When ID provided) -->
+      <div id="verify-result-box" class="hidden rounded-2xl border bg-navy-card p-8 text-center shadow-2xl transition-all">
+        <div id="verify-icon-slot" class="mx-auto size-16 flex items-center justify-center rounded-full mb-4"></div>
+        
+        <h1 id="verify-headline" class="font-serif text-2xl sm:text-3xl text-white font-bold mb-1"></h1>
+        <p id="verify-id-label" class="text-xs font-mono tracking-widest text-gold uppercase mb-6"></p>
+
+        <!-- Verification Detail Rows -->
+        <div id="verify-details" class="p-4 rounded-lg bg-black/60 border border-white/10 text-left text-xs font-mono space-y-2.5 mb-6">
+          <div class="flex justify-between border-b border-white/10 pb-1.5">
+            <span class="text-slate-400">DELEGATE</span>
+            <span id="row-name" class="font-bold text-white text-right max-w-[60%]"></span>
+          </div>
+          <div class="flex justify-between border-b border-white/10 pb-1.5">
+            <span class="text-slate-400">ORGANIZATION</span>
+            <span id="row-org" class="text-slate-200 text-right max-w-[60%]"></span>
+          </div>
+          <div class="flex justify-between border-b border-white/10 pb-1.5">
+            <span class="text-slate-400">CLASS</span>
+            <span id="row-class" class="font-bold text-gold"></span>
+          </div>
+          <div class="flex justify-between border-b border-white/10 pb-1.5">
+            <span class="text-slate-400">SCANS USED</span>
+            <span id="row-scans" class="font-bold text-emerald-400"></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-400">TRANSACTION</span>
+            <span id="row-tx" class="text-slate-300 text-[10px]"></span>
+          </div>
+        </div>
+
+        <p id="verify-extra-msg" class="text-xs text-slate-300 mb-6"></p>
+
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a id="btn-view-ticket" href="#" class="btn-gold text-xs py-3 px-5 font-bold uppercase tracking-wider">
+            View Ticket Pass
+          </a>
+          <a href="/verify" class="btn-outline-gold text-xs py-3 px-5 font-bold uppercase tracking-wider">
+            Scan Another Pass
+          </a>
+        </div>
+      </div>
+
+      <!-- MODE 2: Manual Gate Input Form (When no ID or scanning new pass) -->
+      <div id="verify-input-box" class="rounded-2xl border border-gold/30 bg-navy-card p-8 sm:p-10 text-center shadow-2xl">
+        <div class="w-14 h-14 rounded-full bg-gold/10 border border-gold flex items-center justify-center text-gold mx-auto mb-4">
+          <svg class="size-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
+        </div>
+
+        <h1 class="font-serif text-2xl sm:text-3xl text-white font-bold mb-2">Gate Admission Control</h1>
+        <p class="text-xs text-slate-400 mb-6 leading-relaxed">
+          Scan a delegate pass QR code or enter the credential ID printed on the summit ticket (e.g. <span class="text-gold font-mono">TWC-VIP-XXXXXX</span>).
+        </p>
+
+        <form id="gate-verify-form" class="space-y-4">
+          <div>
+            <input
+              id="gate-id-input"
+              type="text"
+              class="w-full rounded-lg border border-gold/30 bg-obsidian px-4 py-3.5 text-center text-sm font-mono tracking-widest text-white uppercase placeholder:text-slate-600 focus:border-gold focus:outline-none"
+              placeholder="TWC-VIP-XXXXXX or TWC-BLOCK-XXXXXX"
+              required
+            />
+          </div>
+
+          <button type="submit" class="btn-gold w-full py-3.5 text-xs font-bold tracking-widest uppercase shadow-xl cursor-pointer">
+            Validate Credential
+          </button>
+        </form>
+
+        <div class="mt-6 pt-4 border-t border-white/10 text-[11px] font-mono text-slate-500">
+          Corporate block allocations admit up to 10 verified delegate scans.
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gold/20 py-6 text-center text-xs font-mono text-slate-500 bg-black">
+    <p>&copy; 2026 QOHEL AFRICA GROUP · Sovereign Gate Control Framework.</p>
+  </footer>
+
+  <script src="/assets/js/tickets.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      let ticketId = urlParams.get('id');
+
+      if (!ticketId) {
+        const parts = window.location.pathname.split('/');
+        const lastPart = parts[parts.length - 1];
+        if (lastPart && lastPart !== 'verify' && lastPart !== 'verify.html') {
+          ticketId = decodeURIComponent(lastPart);
+        }
+      }
+
+      const inputBox = document.getElementById('verify-input-box');
+      const resultBox = document.getElementById('verify-result-box');
+      const headlineEl = document.getElementById('verify-headline');
+      const idLabelEl = document.getElementById('verify-id-label');
+      const iconSlot = document.getElementById('verify-icon-slot');
+      const detailsBox = document.getElementById('verify-details');
+      const extraMsgEl = document.getElementById('verify-extra-msg');
+      const viewTicketBtn = document.getElementById('btn-view-ticket');
+
+      // Hook manual form
+      const form = document.getElementById('gate-verify-form');
+      if (form) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const inputVal = document.getElementById('gate-id-input').value.trim();
+          if (inputVal) {
+            window.location.href = `/verify/${encodeURIComponent(inputVal.replace(/^#/, ''))}`;
+          }
+        });
+      }
+
+      if (!ticketId) {
+        inputBox.classList.remove('hidden');
+        resultBox.classList.add('hidden');
+        return;
+      }
+
+      // Execute scan check
+      const result = await window.QAG_TICKETS.registerScanAsync(ticketId);
+      inputBox.classList.add('hidden');
+      resultBox.classList.remove('hidden');
+
+      const { status, ticket } = result;
+      idLabelEl.textContent = `#${ticketId.toUpperCase()}`;
+
+      if (status === 'valid' && ticket) {
+        resultBox.classList.add('border-emerald-500/50', 'bg-emerald-950/20');
+        iconSlot.className = 'mx-auto size-16 flex items-center justify-center rounded-full mb-4 bg-emerald-500/20 text-emerald-400 border-2 border-emerald-500';
+        iconSlot.innerHTML = `<svg class="size-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>`;
+        headlineEl.textContent = 'Admission Granted';
+        headlineEl.className = 'font-serif text-2xl sm:text-3xl text-emerald-400 font-bold mb-1';
+
+        const tier = window.QAG_TICKETS.getTier(ticket.tier);
+        const used = ticket.scans.length;
+        document.getElementById('row-name').textContent = ticket.name;
+        document.getElementById('row-org').textContent = ticket.organization;
+        document.getElementById('row-class').textContent = tier.classLabel;
+        document.getElementById('row-scans').textContent = `${used} of ${ticket.seats} Allowed`;
+        document.getElementById('row-tx').textContent = ticket.transactionId;
+
+        extraMsgEl.textContent = ticket.seats > 1 
+          ? `Master pass valid. ${ticket.seats - used} scan(s) remaining for this corporate cohort.` 
+          : 'Single delegate admission validated for mainstage entry.';
+        
+        viewTicketBtn.href = `/ticket/${encodeURIComponent(ticket.id)}`;
+
+      } else if (status === 'exhausted' && ticket) {
+        resultBox.classList.add('border-red-500/50', 'bg-red-950/20');
+        iconSlot.className = 'mx-auto size-16 flex items-center justify-center rounded-full mb-4 bg-red-500/20 text-red-400 border-2 border-red-500';
+        iconSlot.innerHTML = `<svg class="size-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>`;
+        headlineEl.textContent = 'Scan Limit Reached';
+        headlineEl.className = 'font-serif text-2xl sm:text-3xl text-red-400 font-bold mb-1';
+
+        const tier = window.QAG_TICKETS.getTier(ticket.tier);
+        document.getElementById('row-name').textContent = ticket.name;
+        document.getElementById('row-org').textContent = ticket.organization;
+        document.getElementById('row-class').textContent = tier.classLabel;
+        document.getElementById('row-scans').textContent = `${ticket.scans.length} of ${ticket.seats} (EXHAUSTED)`;
+        document.getElementById('row-scans').className = 'font-bold text-red-400';
+        document.getElementById('row-tx').textContent = ticket.transactionId;
+
+        extraMsgEl.textContent = `All ${ticket.seats} permitted entries for this credential have already been scanned.`;
+        viewTicketBtn.href = `/ticket/${encodeURIComponent(ticket.id)}`;
+
+      } else {
+        // Unknown
+        resultBox.classList.add('border-red-500/50', 'bg-red-950/20');
+        iconSlot.className = 'mx-auto size-16 flex items-center justify-center rounded-full mb-4 bg-red-500/20 text-red-400 border-2 border-red-500';
+        iconSlot.innerHTML = `<svg class="size-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>`;
+        headlineEl.textContent = 'Credential Not Recognised';
+        headlineEl.className = 'font-serif text-2xl sm:text-3xl text-red-400 font-bold mb-1';
+
+        detailsBox.classList.add('hidden');
+        extraMsgEl.textContent = 'No ticket with this ID was found in the sovereign registry. Please verify the ID code.';
+        viewTicketBtn.classList.add('hidden');
+      }
+    });
+  </script>
+</body>
+</html>

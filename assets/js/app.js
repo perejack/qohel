@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initGovernanceVault();
   initBooksModal();
   initTWCModals();
-  initTicketVerificationSystem();
   initMobileDockScrollspy();
   initMethodologyMatrix();
 });
@@ -775,7 +774,7 @@ function initTWCModals() {
       const nameEl = document.getElementById('twc-selected-tier-name');
       const priceEl = document.getElementById('twc-selected-tier-price');
       if (nameEl) nameEl.innerText = currentTierName;
-      if (priceEl) priceEl.innerText = 'KSH 10 (Test Mode)';
+      if (priceEl) priceEl.innerText = currentTierPrice;
 
       resetModal();
       modal.classList.add('active');
@@ -827,8 +826,8 @@ function initTWCModals() {
         return;
       }
 
-      // Test Mode Active: Set amount to 10 KES as requested
-      const amount = 10;
+      const priceText = currentTierPrice.replace(/[^0-9]/g, '');
+      const amount = parseInt(priceText, 10) || 7500;
 
       const submitBtn = form.querySelector('button[type="submit"]');
       if (submitBtn) {
@@ -838,7 +837,7 @@ function initTWCModals() {
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
           </svg>
-          Connecting to PesaPal (KES 10)...
+          Connecting to PesaPal...
         `;
       }
 
@@ -927,35 +926,68 @@ function initTWCModals() {
         stopPolling();
         playSuccessChime();
 
-        const el = (id, val) => { const e = document.getElementById(id); if (e) e.textContent = val; };
-        el('twc-success-name', orderMeta.delegateName);
-        el('twc-success-tier', orderMeta.tierName);
-        el('twc-success-amount', `KSH ${Number(orderMeta.tierPrice).toLocaleString()}`);
-        el('twc-success-ref', orderMeta.orderRef || orderTrackingId);
+        // 1. Determine Tier ID (general, executive, or corporate)
+        const rawTier = (orderMeta.tierCode || orderMeta.tierName || '').toLowerCase();
+        let tierId = 'executive';
+        if (rawTier.includes('gen') || rawTier.includes('2,500') || rawTier.includes('2500')) tierId = 'general';
+        else if (rawTier.includes('corp') || rawTier.includes('block') || rawTier.includes('20,000') || rawTier.includes('20000')) tierId = 'corporate';
 
-        // Derive authentic unique ticket ID
-        const cleanRef = String(orderMeta.orderRef || orderTrackingId || '0001').replace(/[^a-zA-Z0-9]/g, '');
-        const suffix = cleanRef.substring(Math.max(0, cleanRef.length - 4)).toUpperCase() || '001';
-        
-        let prefix = 'TWC-GEN';
-        const tUpper = (orderMeta.tierName || '').toUpperCase();
-        if (tUpper.includes('VIP') || tUpper.includes('EXECUTIVE')) {
-          prefix = 'TWC-VIP';
-        } else if (tUpper.includes('CORPORATE') || tUpper.includes('BLOCK') || tUpper.includes('INSTITUTIONAL')) {
-          prefix = 'TWC-BLOCK';
-        } else if (tUpper.includes('PROGRAM') || tUpper.includes('COURSE') || tUpper.includes('CLASS')) {
-          prefix = 'TWC-PROG';
-        }
-        const ticketId = `#${prefix}-${suffix}`;
+        const tier = window.QAG_TICKETS ? window.QAG_TICKETS.getTier(tierId) : { id: tierId, seats: tierId === 'corporate' ? 10 : 1 };
+        const txRef = orderMeta.orderRef || data.confirmationCode || orderTrackingId || (window.QAG_TICKETS ? window.QAG_TICKETS.makeTransactionId() : 'SFC' + Date.now());
+        const ticketId = window.QAG_TICKETS ? window.QAG_TICKETS.makeTicketId(tier.id, txRef) : `TWC-${tier.id.toUpperCase()}-${txRef}`;
 
-        const fullOrder = {
-          ...orderMeta,
-          ticketId,
-          confirmationCode: data.confirmationCode || 'CONFIRMED'
+        // 2. Mint & Persist Ticket Object
+        const ticket = {
+          id: ticketId,
+          tier: tier.id,
+          name: (orderMeta.delegateName || '').trim().toUpperCase(),
+          email: (orderMeta.email || '').trim(),
+          phone: (orderMeta.phone || '').trim(),
+          organization: (orderMeta.organization || '').trim().toUpperCase(),
+          amount: Number(orderMeta.tierPrice) || tier.price || 7500,
+          seats: tier.seats || (tierId === 'corporate' ? 10 : 1),
+          transactionId: txRef,
+          issuedAt: new Date().toISOString(),
+          scans: []
         };
 
-        // Render live authentic ticket to screen
-        renderAuthenticLiveTicket(fullOrder);
+        if (window.QAG_TICKETS) {
+          window.QAG_TICKETS.saveTicket(ticket);
+        }
+
+        // 3. Update Success State Header Details
+        const el = (id, val) => { const e = document.getElementById(id); if (e) e.textContent = val; };
+        el('twc-success-ref', txRef);
+        el('twc-success-amount', `KSH ${ticket.amount.toLocaleString()}`);
+
+        // 4. Render the Full-Fidelity Visual Ticket Card
+        const previewSlot = document.getElementById('twc-modal-ticket-preview');
+        const verifyUrl = `${window.location.origin}/verify/${encodeURIComponent(ticket.id)}`;
+
+        if (previewSlot && window.QAG_TICKETS) {
+          window.QAG_TICKETS.renderTicketCardHTML(ticket, verifyUrl).then((cardHtml) => {
+            previewSlot.innerHTML = cardHtml;
+          });
+        }
+
+        // 5. Connect Action Buttons
+        const openPageBtn = document.getElementById('twc-open-ticket-page-btn');
+        if (openPageBtn) openPageBtn.href = `/ticket/${encodeURIComponent(ticket.id)}`;
+
+        const testQrBtn = document.getElementById('twc-test-qr-btn');
+        if (testQrBtn) testQrBtn.href = `/verify/${encodeURIComponent(ticket.id)}`;
+
+        const downloadBtn = document.getElementById('twc-download-ticket-btn');
+        if (downloadBtn) {
+          downloadBtn.onclick = () => {
+            generateLuxuryPDFTicket({
+              ...orderMeta,
+              ticketId: ticket.id,
+              confirmationCode: txRef,
+              seats: ticket.seats
+            });
+          };
+        }
 
         showStep(stepSuccess);
         return true;
@@ -983,55 +1015,6 @@ function initTWCModals() {
       if (currentOrderTrackingId && currentOrderData) {
         checkPaymentStatus(currentOrderTrackingId, currentOrderData, true);
       }
-    });
-  }
-
-  // Hook instant pass clearance button (for testing & instant generation)
-  const simulateSuccessBtn = document.getElementById('twc-simulate-success-btn');
-  if (simulateSuccessBtn) {
-    simulateSuccessBtn.addEventListener('click', () => {
-      stopPolling();
-      playSuccessChime();
-
-      const orderMeta = currentOrderData || {
-        delegateName: document.getElementById('twc-name')?.value || 'Faith Wanjiku',
-        organization: document.getElementById('twc-org')?.value || 'Qohel Enterprise Group',
-        email: document.getElementById('twc-email')?.value || 'delegate@qohelafrica.com',
-        phone: document.getElementById('twc-phone')?.value || '0700000000',
-        tierName: currentTierName,
-        tierPrice: currentTierPrice.replace(/[^0-9]/g, '') || '7500',
-        tierCode: currentTierCode,
-        orderRef: 'QAG-SIM-' + Math.floor(100000 + Math.random() * 900000)
-      };
-
-      const cleanRef = String(orderMeta.orderRef || '0001').replace(/[^a-zA-Z0-9]/g, '');
-      const suffix = cleanRef.substring(Math.max(0, cleanRef.length - 4)).toUpperCase() || '001';
-      
-      let prefix = 'TWC-GEN';
-      const tUpper = (orderMeta.tierName || '').toUpperCase();
-      if (tUpper.includes('VIP') || tUpper.includes('EXECUTIVE')) {
-        prefix = 'TWC-VIP';
-      } else if (tUpper.includes('CORPORATE') || tUpper.includes('BLOCK') || tUpper.includes('INSTITUTIONAL')) {
-        prefix = 'TWC-BLOCK';
-      } else if (tUpper.includes('PROGRAM') || tUpper.includes('COURSE') || tUpper.includes('CLASS')) {
-        prefix = 'TWC-PROG';
-      }
-      const ticketId = `#${prefix}-${suffix}`;
-
-      const fullOrder = {
-        ...orderMeta,
-        ticketId,
-        confirmationCode: 'TEST-CONFIRMED'
-      };
-
-      const el = (id, val) => { const e = document.getElementById(id); if (e) e.textContent = val; };
-      el('twc-success-name', orderMeta.delegateName);
-      el('twc-success-tier', orderMeta.tierName);
-      el('twc-success-amount', `KSH ${Number(orderMeta.tierPrice).toLocaleString()}`);
-      el('twc-success-ref', fullOrder.orderRef);
-
-      renderAuthenticLiveTicket(fullOrder);
-      showStep(stepSuccess);
     });
   }
 
@@ -1064,448 +1047,6 @@ function initTWCModals() {
 }
 
 /* ==========================================================================
-   AUTHENTIC LIVE TICKET GENERATION ENGINE (Images 1, 2 & 3 Matching)
-   ========================================================================== */
-let activeTicketOrder = null;
-
-function renderAuthenticLiveTicket(order) {
-  activeTicketOrder = order;
-  const mount = document.getElementById('twc-live-ticket-mount');
-  if (!mount) return;
-
-  // Build live scannable verification URL (encodes up to 10 max scans)
-  const baseUrl = window.location.origin + window.location.pathname;
-  const verifyUrl = `${baseUrl}?verify_ticket=1&id=${encodeURIComponent(order.ticketId)}&name=${encodeURIComponent(order.delegateName)}&org=${encodeURIComponent(order.organization)}&tier=${encodeURIComponent(order.tierName)}&ref=${encodeURIComponent(order.orderRef || order.orderTrackingId || 'QAG')}&max=10`;
-
-  // Generate QR Code data URL using offscreen helper
-  const qrTemp = document.createElement('div');
-  qrTemp.style.display = 'none';
-  document.body.appendChild(qrTemp);
-
-  new QRCode(qrTemp, {
-    text: verifyUrl,
-    width: 256,
-    height: 256,
-    colorDark: "#000000",
-    colorLight: "#ffffff",
-    correctLevel: QRCode.CorrectLevel.H
-  });
-
-  setTimeout(() => {
-    let qrDataUrl = '';
-    const qrImg = qrTemp.querySelector('img') || qrTemp.querySelector('canvas');
-    if (qrImg) {
-      qrDataUrl = qrImg.src || qrImg.toDataURL('image/png');
-    }
-    document.body.removeChild(qrTemp);
-
-    const tierUpper = (order.tierName || '').toUpperCase();
-    let ticketHTML = '';
-
-    // ------------------------------------------------------------------------
-    // THEME 1: INSTITUTIONAL GROUP ALLOCATION PASS (Image 1: Teal Cyber Grid)
-    // ------------------------------------------------------------------------
-    if (tierUpper.includes('CORPORATE') || tierUpper.includes('BLOCK') || tierUpper.includes('INSTITUTIONAL')) {
-      ticketHTML = `
-        <div id="live-ticket-node" class="twc-ticket-card ticket-theme-corporate">
-          <!-- Zone 1: The Flank -->
-          <div class="ticket-flank">
-            <div class="flex flex-col items-center">
-              <svg class="w-7 h-7 text-white mb-2" viewBox="0 0 48 48" fill="none" stroke="currentColor">
-                <circle cx="24" cy="24" r="20" stroke-width="2"/>
-                <path d="M16 24C16 19.5817 19.5817 16 24 16C28.4183 16 32 19.5817 32 24C32 28.4183 28.4183 32 24 32" stroke-width="2"/>
-              </svg>
-              <span class="font-serif font-bold text-[10px] text-white tracking-widest block leading-tight">QOHEL AFRICA<br>GROUP</span>
-            </div>
-            <div class="flank-rotated-text">
-              CONVENED BY QOHEL AFRICA GROUP
-            </div>
-            <div class="text-[8px] font-mono text-slate-400 tracking-wider">
-              SOVEREIGN ENTERPRISE NETWORK
-            </div>
-          </div>
-
-          <!-- Zone 2: The Core Body -->
-          <div class="ticket-core">
-            <div class="flex items-center justify-center gap-2 mb-1">
-              <!-- Interconnected Arrows Emblem -->
-              <svg class="w-10 h-10 text-slate-200" viewBox="0 0 64 64" fill="currentColor">
-                <path d="M22 14 L34 26 L28 26 L28 36 L38 36 L38 30 L50 42 L38 54 L38 48 L20 48 L20 26 L14 26 Z" opacity="0.95"/>
-                <path d="M42 50 L30 38 L36 38 L36 28 L26 28 L26 34 L14 22 L26 10 L26 16 L44 16 L44 38 L50 38 Z" opacity="0.75"/>
-              </svg>
-            </div>
-            
-            <h2 class="font-serif text-2xl sm:text-3xl font-extrabold text-white tracking-wider mb-0.5">
-              THE WEALTH CONVERGENCE
-            </h2>
-            <p class="font-mono text-[11px] text-slate-300 tracking-widest uppercase mb-3">
-              REDESIGNING ECONOMIC ARCHITECTURE
-            </p>
-            
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded bg-black/60 border border-white/20 text-xs text-white font-medium mb-3">
-              <span>🏛️</span>
-              <span class="tracking-wider uppercase font-semibold">INSTITUTIONAL GROUP ALLOCATION PASS</span>
-            </div>
-
-            <div class="text-xs font-mono text-slate-300 space-y-1 mb-3">
-              <p class="text-[10px] text-cyan-400 font-bold uppercase tracking-widest">SUMMIT COORDINATES</p>
-              <p class="text-white font-bold text-sm tracking-wide">DATE: MARCH 24 - 26, 2026</p>
-              <p class="text-slate-200">VENUE: NAIROBI, KENYA</p>
-            </div>
-
-            <div class="w-full py-1.5 bg-black/80 rounded border-t border-b border-cyan-500/30 text-[10px] font-mono text-cyan-300 tracking-widest font-bold uppercase">
-              ■ VALID FOR UP TO 10 SCANS AT VENUE ENTRY ■
-            </div>
-          </div>
-
-          <!-- Zone 3: Dynamic Box -->
-          <div class="ticket-dynamic-box">
-            <div class="ticket-qr-frame">
-              <img src="${qrDataUrl}" alt="Scannable QR Pass">
-            </div>
-
-            <div class="text-left font-mono text-[11px] space-y-1.5 text-cyan-300 pt-3">
-              <div>
-                <span class="text-slate-400 block text-[9px]">SPONSOR:</span>
-                <strong class="text-white block truncate uppercase">${order.organization || order.delegateName}</strong>
-              </div>
-              <div>
-                <span class="text-slate-400 block text-[9px]">SEATS:</span>
-                <strong class="text-cyan-300 block">10 ALLOCATED</strong>
-              </div>
-              <div>
-                <span class="text-slate-400 block text-[9px]">CLASS:</span>
-                <strong class="text-white block">COHORT PASS</strong>
-              </div>
-              <div>
-                <span class="text-slate-400 block text-[9px]">ID:</span>
-                <strong class="text-gold block font-bold">${order.ticketId}</strong>
-              </div>
-            </div>
-
-            <p class="text-[8px] font-mono text-slate-400 text-center uppercase tracking-wider pt-2 border-t border-white/10">
-              NON-TRANSFERABLE OUTSIDE THE NOMINATED INSTITUTION
-            </p>
-          </div>
-        </div>
-      `;
-
-    // ------------------------------------------------------------------------
-    // THEME 2: GENERAL ADMISSION DELEGATE PASS (Image 2: Silver Metallic)
-    // ------------------------------------------------------------------------
-    } else if (tierUpper.includes('DELEGATE') || tierUpper.includes('GENERAL')) {
-      ticketHTML = `
-        <div id="live-ticket-node" class="twc-ticket-card ticket-theme-delegate">
-          <!-- Zone 1: The Flank -->
-          <div class="ticket-flank">
-            <div class="flex flex-col items-center">
-              <svg class="w-7 h-7 text-white mb-2" viewBox="0 0 48 48" fill="none" stroke="currentColor">
-                <circle cx="24" cy="24" r="20" stroke-width="2"/>
-                <path d="M16 24C16 19.5817 19.5817 16 24 16C28.4183 16 32 19.5817 32 24C32 28.4183 28.4183 32 24 32" stroke-width="2"/>
-              </svg>
-              <span class="font-serif font-bold text-[10px] text-white tracking-widest block leading-tight">QOHEL AFRICA<br>GROUP</span>
-            </div>
-            <div class="flank-rotated-text">
-              THE WEALTH CONVERGENCE
-            </div>
-            <div class="text-[8px] font-sans text-slate-300 leading-tight">
-              SHAPING GLOBAL ECONOMIC ARCHITECTURE THROUGH STRATEGIC PARTNERSHIPS.
-            </div>
-          </div>
-
-          <!-- Zone 2: The Core Body (Silver Metallic) -->
-          <div class="ticket-core">
-            <div class="font-serif text-5xl font-black text-slate-800 tracking-tighter opacity-90 drop-shadow mb-0.5">
-              TWC
-            </div>
-            <h2 class="font-serif text-xl sm:text-2xl font-black text-slate-900 tracking-wider mb-0.5">
-              THE WEALTH CONVERGENCE
-            </h2>
-            <p class="font-mono text-[10px] text-slate-700 tracking-widest uppercase mb-2 font-semibold">
-              REDESIGNING ECONOMIC ARCHITECTURE.
-            </p>
-
-            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gradient-to-r from-sky-400 to-blue-600 text-white text-[11px] font-bold shadow-lg mb-2">
-              <span>🎁</span>
-              <span class="tracking-wide uppercase">INCLUDES FREE 30-DAY MINDSET SHIFT EBOOK DOWNLOAD</span>
-            </div>
-
-            <div class="text-xs font-mono text-slate-800 space-y-0.5 mb-2">
-              <p class="font-black text-sm tracking-wide">DATE: MARCH 24-26, 2026</p>
-              <p class="font-bold">VENUE: NAIROBI, KENYA</p>
-            </div>
-
-            <div class="w-full py-1.5 bg-black rounded text-[10px] font-mono text-white tracking-widest font-bold uppercase">
-              ■ GENERAL ADMISSION DELEGATE ■
-            </div>
-          </div>
-
-          <!-- Zone 3: Dynamic Box -->
-          <div class="ticket-dynamic-box">
-            <div class="ticket-qr-frame">
-              <img src="${qrDataUrl}" alt="Scannable QR Pass">
-            </div>
-
-            <div class="text-left font-mono text-xs space-y-1.5 text-slate-300 pt-3">
-              <div>
-                <span class="text-slate-400 block text-[9px]">NAME:</span>
-                <strong class="text-white block truncate uppercase">${order.delegateName}</strong>
-              </div>
-              <div>
-                <span class="text-slate-400 block text-[9px]">CORP:</span>
-                <strong class="text-slate-200 block truncate uppercase">${order.organization || 'SOVEREIGN DELEGATE'}</strong>
-              </div>
-              <div>
-                <span class="text-slate-400 block text-[9px]">CLASS:</span>
-                <strong class="text-cyan-400 block uppercase">DELEGATE</strong>
-              </div>
-              <div>
-                <span class="text-slate-400 block text-[9px]">ID:</span>
-                <strong class="text-gold block font-bold">${order.ticketId}</strong>
-              </div>
-            </div>
-
-            <div class="font-serif text-lg font-bold text-gold text-right pt-2 border-t border-white/10">
-              KSH 2,500
-            </div>
-          </div>
-        </div>
-      `;
-
-    // ------------------------------------------------------------------------
-    // THEME 3: VIP EXECUTIVE PASS & PROGRAMS (Image 3: Obsidian Facets & Crimson)
-    // ------------------------------------------------------------------------
-    } else {
-      ticketHTML = `
-        <div id="live-ticket-node" class="twc-ticket-card ticket-theme-vip">
-          <!-- Zone 1: The Flank (Hologram Strip) -->
-          <div class="ticket-flank">
-            <div class="hologram-seal">VALID</div>
-            <div class="hologram-seal">VALID</div>
-            <div class="hologram-seal">VALID</div>
-            <div class="hologram-seal">VALID</div>
-            <div class="hologram-seal">VALID</div>
-          </div>
-
-          <!-- Zone 2: The Core Body (Obsidian Facets & Crimson VIP Ribbon) -->
-          <div class="ticket-core">
-            <div class="flex items-center justify-center gap-2 mb-1">
-              <svg class="w-8 h-8 text-gold" viewBox="0 0 48 48" fill="none" stroke="currentColor">
-                <circle cx="24" cy="24" r="20" stroke-width="2"/>
-                <path d="M24 8v32M8 24h32M14 14l20 20M34 14L14 34" stroke-width="1.5"/>
-              </svg>
-              <span class="font-serif font-bold text-xs text-gold tracking-widest">THE WEALTH CONVERGENCE</span>
-            </div>
-
-            <h2 class="font-serif text-xl sm:text-2xl font-bold text-white tracking-wide leading-snug mb-1">
-              THE WEALTH CONVERGENCE:<br><span class="text-gold-light">REDESIGNING ECONOMIC ARCHITECTURE</span>
-            </h2>
-
-            <div class="vip-crimson-banner my-2">
-              ★ ${order.tierName.toUpperCase()} ★ ${order.tierPrice ? `KSH ${Number(order.tierPrice).toLocaleString()}` : ''}
-            </div>
-
-            <div class="text-xs font-mono text-slate-200 space-y-0.5 mb-2">
-              <p class="font-bold text-sm text-white">DATE: MARCH 24-26, 2026</p>
-              <p class="text-gold-light">VENUE: NAIROBI, KENYA</p>
-            </div>
-
-            <div class="text-[9px] font-mono text-slate-400 tracking-wider">
-              CONVENED BY <strong class="text-white">QOHEL AFRICA GROUP</strong>
-            </div>
-          </div>
-
-          <!-- Zone 3: Dynamic Box -->
-          <div class="ticket-dynamic-box">
-            <div class="ticket-qr-frame">
-              <img src="${qrDataUrl}" alt="Scannable QR Pass">
-            </div>
-
-            <div class="text-left font-mono text-xs space-y-1.5 text-slate-300 pt-3">
-              <div>
-                <span class="text-slate-400 block text-[9px]">ATTENDEE:</span>
-                <strong class="text-white block truncate uppercase">${order.delegateName}</strong>
-              </div>
-              <div>
-                <span class="text-slate-400 block text-[9px]">AFFILIATION:</span>
-                <strong class="text-slate-200 block truncate uppercase">${order.organization || 'SOVEREIGN LEADER'}</strong>
-              </div>
-              <div>
-                <span class="text-slate-400 block text-[9px]">ACCESS LEVEL:</span>
-                <strong class="text-gold block uppercase">VIP EXECUTIVE CLEARANCE</strong>
-              </div>
-              <div>
-                <span class="text-slate-400 block text-[9px]">AUTHENTICATED ID:</span>
-                <strong class="text-gold-light block font-bold">${order.ticketId}</strong>
-              </div>
-            </div>
-
-            <p class="text-[8px] font-mono text-slate-400 text-center uppercase tracking-wider pt-2 border-t border-white/10">
-              INCLUDES PRIVATE BOARDROOM &amp; EXECUTIVE NETWORKING
-            </p>
-          </div>
-        </div>
-      `;
-    }
-
-    mount.innerHTML = ticketHTML;
-
-    // Attach Download handlers
-    const pdfBtn = document.getElementById('twc-download-ticket-btn');
-    if (pdfBtn) {
-      pdfBtn.onclick = () => generateLuxuryPDFTicket(order);
-    }
-
-    const pngBtn = document.getElementById('twc-download-png-btn');
-    if (pngBtn) {
-      pngBtn.onclick = () => downloadTicketPNG(order);
-    }
-
-    const verifyBtn = document.getElementById('twc-verify-link-btn');
-    if (verifyBtn) {
-      verifyBtn.onclick = () => {
-        openTicketVerificationModal({
-          id: order.ticketId,
-          name: order.delegateName,
-          org: order.organization,
-          tier: order.tierName,
-          ref: order.orderRef || order.orderTrackingId || 'QAG',
-          maxScans: 10
-        });
-      };
-    }
-
-  }, 200);
-}
-
-/* --------------------------------------------------------------------------
-   DOWNLOAD HIGH-RES PNG TICKET (html2canvas)
-   -------------------------------------------------------------------------- */
-async function downloadTicketPNG(order) {
-  const ticketNode = document.getElementById('live-ticket-node');
-  if (!ticketNode || !window.html2canvas) {
-    alert('Rendering engine initializing... please click in 2 seconds.');
-    return;
-  }
-
-  try {
-    const canvas = await html2canvas(ticketNode, {
-      scale: 3,
-      useCORS: true,
-      backgroundColor: null,
-      logging: false
-    });
-
-    const link = document.createElement('a');
-    const slug = (order.delegateName || 'Attendee').replace(/[^a-zA-Z0-9]/g, '-');
-    link.download = `TWC2026-TICKET-${slug}-${order.ticketId || 'PASS'}.png`;
-    link.href = canvas.toDataURL('image/png');
-    link.click();
-    playSuccessChime();
-  } catch (err) {
-    console.error('PNG Render error:', err);
-    alert('Could not download image. Please use the PDF button.');
-  }
-}
-
-/* ==========================================================================
-   OFFICIAL TICKET SECURITY VALIDATION SYSTEM & SCAN TRACKER (MAX 10 SCANS)
-   ========================================================================== */
-function initTicketVerificationSystem() {
-  const modal = document.getElementById('ticket-verify-modal');
-  const closeBtn = document.getElementById('close-ticket-verify-modal');
-  const closeBtn2 = document.getElementById('close-ticket-verify-btn');
-
-  const closeModal = () => {
-    if (modal) modal.classList.remove('active');
-  };
-
-  if (closeBtn) closeBtn.addEventListener('click', closeModal);
-  if (closeBtn2) closeBtn2.addEventListener('click', closeModal);
-  if (modal) modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-
-  // Check URL parameters for live QR scan validation
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.has('verify_ticket') && urlParams.get('verify_ticket') === '1') {
-    const ticketData = {
-      id: urlParams.get('id') || '#TWC-PASS-0001',
-      name: urlParams.get('name') || 'Registered Attendee',
-      org: urlParams.get('org') || 'Sovereign Institution',
-      tier: urlParams.get('tier') || 'TWC Summit Pass',
-      ref: urlParams.get('ref') || 'QAG-VERIFIED',
-      maxScans: parseInt(urlParams.get('max'), 10) || 10
-    };
-    setTimeout(() => {
-      openTicketVerificationModal(ticketData);
-    }, 600);
-  }
-}
-
-function openTicketVerificationModal(ticketData) {
-  const modal = document.getElementById('ticket-verify-modal');
-  if (!modal) return;
-
-  const storageKey = `twc_ticket_scans_${ticketData.id.replace(/[^a-zA-Z0-9]/g, '_')}`;
-  let currentScans = parseInt(localStorage.getItem(storageKey), 10) || 0;
-  currentScans += 1;
-  localStorage.setItem(storageKey, currentScans);
-
-  const maxScans = ticketData.maxScans || 10;
-  const isExhausted = currentScans > maxScans;
-  const remaining = Math.max(0, maxScans - currentScans);
-  const percentage = Math.min(100, Math.round((currentScans / maxScans) * 100));
-
-  // Update Status Header
-  const statusContainer = document.getElementById('verify-status-container');
-  if (statusContainer) {
-    if (isExhausted) {
-      statusContainer.innerHTML = `
-        <div class="w-16 h-16 rounded-full bg-red-950/80 border-2 border-red-500 text-red-400 mx-auto flex items-center justify-center mb-3 shadow-[0_0_25px_rgba(239,68,68,0.4)]">
-          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-        </div>
-        <span class="badge-gold text-[9px] mb-1 bg-red-950 text-red-400 border-red-500/40">ADMISSION LIMIT EXHAUSTED</span>
-        <h3 class="font-serif text-2xl font-bold text-white">Scan Limit Reached (10/10 Used)</h3>
-        <p class="text-xs text-slate-400 max-w-sm mx-auto mt-1">This ticket has exhausted its maximum 10 venue entry scans. Entry clearance is locked.</p>
-      `;
-    } else {
-      statusContainer.innerHTML = `
-        <div class="w-16 h-16 rounded-full bg-emerald-950/80 border-2 border-emerald-400 text-emerald-400 mx-auto flex items-center justify-center mb-3 shadow-[0_0_25px_rgba(52,211,153,0.4)]">
-          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-        </div>
-        <span class="badge-gold text-[9px] mb-1 bg-emerald-950 text-emerald-400 border-emerald-500/40">CRYPTOGRAPHIC ENTRY APPROVED</span>
-        <h3 class="font-serif text-2xl font-bold text-white">Authentic &amp; Valid Ticket</h3>
-        <p class="text-xs text-slate-300 max-w-sm mx-auto mt-1">Issued under the Sovereign Governance of Qohel Africa Group Holdings.</p>
-      `;
-    }
-  }
-
-  // Populate Details
-  const el = (id, val) => { const e = document.getElementById(id); if (e) e.textContent = val; };
-  el('verify-ticket-id', ticketData.id);
-  el('verify-attendee-name', ticketData.name);
-  el('verify-org-name', ticketData.org || 'Individual Delegate');
-  el('verify-pass-class', ticketData.tier);
-  el('verify-payment-ref', ticketData.ref);
-
-  // Scan Counter & Meter
-  el('verify-scan-counter-text', `Scan ${currentScans} / ${maxScans} Used`);
-  el('verify-remaining-scans-text', `${remaining} Admittances Remaining`);
-
-  const progressBar = document.getElementById('verify-scan-progress-bar');
-  if (progressBar) {
-    progressBar.style.width = `${percentage}%`;
-    if (isExhausted) {
-      progressBar.className = 'bg-red-500 h-full transition-all duration-500';
-    } else {
-      progressBar.className = 'bg-gradient-to-r from-emerald-500 via-amber-500 to-red-500 h-full transition-all duration-500';
-    }
-  }
-
-  playSuccessChime();
-  modal.classList.add('active');
-}
-
-/* ==========================================================================
    LUXURY CLIENT-SIDE PDF TICKET GENERATOR (jsPDF + QRCode)
    ========================================================================== */
 async function generateLuxuryPDFTicket(order) {
@@ -1515,118 +1056,145 @@ async function generateLuxuryPDFTicket(order) {
   }
 
   const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: [210, 100] });
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
 
   const W = 210; // mm
-  const H = 100; // mm
+  const H = 297; // mm
 
-  // Background: Deep Obsidian
-  doc.setFillColor(6, 10, 16);
+  // Background: Deep Obsidian Navy
+  doc.setFillColor(4, 7, 17);
   doc.rect(0, 0, W, H, 'F');
 
-  // Outer Gold Accent Borders
-  doc.setDrawColor(212, 175, 55);
-  doc.setLineWidth(0.5);
-  doc.rect(4, 4, W - 8, H - 8, 'S');
+  // Top Gold Accent Bar
+  doc.setFillColor(212, 175, 55);
+  doc.rect(0, 0, W, 4, 'F');
 
-  // Flank Left Bar
-  doc.setFillColor(11, 16, 24);
-  doc.rect(4, 4, 32, H - 8, 'F');
+  // Outer Gold Hairline Borders
   doc.setDrawColor(212, 175, 55);
-  doc.line(36, 4, 36, H - 4);
+  doc.setLineWidth(0.4);
+  doc.rect(10, 8, W - 20, H - 16, 'S');
 
-  // Flank text
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(8);
+  doc.setDrawColor(180, 140, 40);
+  doc.setLineWidth(0.15);
+  doc.rect(12, 10, W - 24, H - 20, 'S');
+
+  // QAG Monogram Emblem
+  doc.setDrawColor(212, 175, 55);
+  doc.setLineWidth(0.8);
+  doc.circle(W / 2, 28, 12, 'S');
   doc.setTextColor(212, 175, 55);
-  doc.text('QOHEL AFRICA', 20, 16, { align: 'center' });
-  doc.setFontSize(6.5);
-  doc.setTextColor(255, 255, 255);
-  doc.text('GROUP', 20, 20, { align: 'center' });
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(11);
+  doc.text('QAG', W / 2, 31.5, { align: 'center' });
 
-  doc.setFontSize(7);
-  doc.setTextColor(148, 163, 184);
-  doc.text('CONVENED BY', 20, 45, { align: 'center' });
+  // Sovereign Brand Wordmark
+  doc.setFontSize(13);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(212, 175, 55);
+  doc.text('QOHEL AFRICA GROUP', W / 2, 48, { align: 'center' });
+
   doc.setFontSize(7.5);
-  doc.setTextColor(212, 175, 55);
-  doc.text('QOHEL AFRICA GROUP', 20, 50, { align: 'center' });
-
-  // Core Center
-  doc.setFontSize(14);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(255, 255, 255);
-  doc.text('THE WEALTH CONVERGENCE', 105, 18, { align: 'center' });
-
-  doc.setFontSize(7);
   doc.setFont('helvetica', 'normal');
+  doc.setTextColor(148, 163, 184);
+  doc.text('Corporate Systems, Strategic Infrastructure & Enterprise Holdings', W / 2, 53, { align: 'center' });
+
+  // Divider line
+  doc.setDrawColor(212, 175, 55);
+  doc.setLineWidth(0.3);
+  doc.line(25, 59, W - 25, 59);
+
+  // Summit Convocation Title
+  doc.setFontSize(18);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(245, 227, 163);
+  doc.text('THE WEALTH CONVERGENCE', W / 2, 68, { align: 'center' });
+
+  doc.setFontSize(10);
   doc.setTextColor(212, 175, 55);
-  doc.text('REDESIGNING ECONOMIC ARCHITECTURE', 105, 23, { align: 'center' });
+  doc.text('TWC 2026 — OFFICIAL DELEGATE PASS', W / 2, 75, { align: 'center' });
+
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(203, 213, 225);
+  doc.text('SEPTEMBER 19, 2026  •  NAIROBI, KENYA  •  EAST AFRICA CORPORATE ARENA', W / 2, 81, { align: 'center' });
+
+  doc.line(25, 87, W - 25, 87);
 
   // Tier Badge Box
-  doc.setFillColor(15, 23, 42);
+  doc.setFillColor(13, 22, 42);
   doc.setDrawColor(212, 175, 55);
-  doc.setLineWidth(0.3);
-  doc.roundedRect(55, 28, 100, 10, 1.5, 1.5, 'FD');
-  doc.setFontSize(8);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(254, 240, 138);
-  doc.text((order.tierName || 'SUMMIT PASS').toUpperCase(), 105, 34.5, { align: 'center' });
-
-  // Attendee Info
-  const startX = 46;
-  const startY = 48;
-
-  doc.setFontSize(6);
-  doc.setTextColor(148, 163, 184);
-  doc.text('ATTENDEE / DELEGATE:', startX, startY);
-  doc.setFontSize(8.5);
-  doc.setTextColor(255, 255, 255);
-  doc.text(String(order.delegateName || '—').toUpperCase(), startX, startY + 5);
-
-  doc.setFontSize(6);
-  doc.setTextColor(148, 163, 184);
-  doc.text('ENTERPRISE / AFFILIATION:', startX, startY + 12);
-  doc.setFontSize(8);
-  doc.setTextColor(203, 213, 225);
-  doc.text(String(order.organization || 'Individual Delegate').toUpperCase(), startX, startY + 17);
-
-  doc.setFontSize(6);
-  doc.setTextColor(148, 163, 184);
-  doc.text('SUMMIT COORDINATES:', startX, startY + 24);
-  doc.setFontSize(7.5);
-  doc.setTextColor(255, 255, 255);
-  doc.text('MARCH 24-26, 2026 • NAIROBI, KENYA', startX, startY + 29);
-
-  // Bottom Notice
-  doc.setFillColor(4, 7, 12);
-  doc.rect(46, 84, 110, 8, 'F');
-  doc.setFontSize(6.5);
-  doc.setTextColor(14, 165, 233);
-  doc.text('■ VALID FOR UP TO 10 SCANS AT VENUE ENTRY ■', 101, 89, { align: 'center' });
-
-  // Right Box: QR Code & ID
-  doc.setDrawColor(212, 175, 55);
-  doc.setLineWidth(0.3);
-  doc.line(160, 4, 160, H - 4);
+  doc.setLineWidth(0.6);
+  doc.roundedRect(W / 2 - 45, 93, 90, 22, 2, 2, 'FD');
 
   doc.setFontSize(7);
   doc.setFont('helvetica', 'bold');
+  doc.setTextColor(148, 163, 184);
+  doc.text('DELEGATE PASS TIER', W / 2, 98, { align: 'center' });
+
+  doc.setFontSize(12);
   doc.setTextColor(212, 175, 55);
-  doc.text(order.ticketId || '#TWC-PASS-0001', 183, 14, { align: 'center' });
+  doc.text((order.tierName || 'EXECUTIVE PASS').toUpperCase(), W / 2, 107, { align: 'center' });
 
-  // Generate QR for PDF
-  const baseUrl = window.location.origin + window.location.pathname;
-  const verifyUrl = `${baseUrl}?verify_ticket=1&id=${encodeURIComponent(order.ticketId || '#TWC-001')}&name=${encodeURIComponent(order.delegateName)}&org=${encodeURIComponent(order.organization)}&tier=${encodeURIComponent(order.tierName)}&ref=${encodeURIComponent(order.orderRef || 'QAG')}&max=10`;
+  // Delegate Information Container
+  const infoY = 122;
+  doc.setFillColor(11, 19, 40);
+  doc.setDrawColor(30, 45, 74);
+  doc.setLineWidth(0.3);
+  doc.roundedRect(20, infoY, W - 40, 52, 2, 2, 'FD');
 
+  const lbl = (t, x, y) => {
+    doc.setFontSize(6.5);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(100, 116, 139);
+    doc.text(t.toUpperCase(), x, y);
+  };
+  const val = (t, x, y, isGold = false) => {
+    doc.setFontSize(9.5);
+    doc.setFont('helvetica', 'bold');
+    if (isGold) doc.setTextColor(212, 175, 55);
+    else doc.setTextColor(248, 250, 252);
+    doc.text(String(t || '—'), x, y);
+  };
+
+  // Left Column
+  lbl('Delegate Full Name', 28, infoY + 8);
+  val(order.delegateName, 28, infoY + 14);
+
+  lbl('Enterprise / Organization', 28, infoY + 24);
+  val(order.organization, 28, infoY + 30);
+
+  lbl('M-Pesa / Contact Telephone', 28, infoY + 40);
+  val(order.phone, 28, infoY + 46);
+
+  // Vertical Separator
+  doc.setDrawColor(30, 45, 74);
+  doc.line(W / 2 + 5, infoY + 6, W / 2 + 5, infoY + 46);
+
+  // Right Column
+  lbl('Ticket Reference', W / 2 + 12, infoY + 8);
+  val(order.orderRef || 'QAG-TWC-PASS', W / 2 + 12, infoY + 14, true);
+
+  lbl('Total Investment Paid', W / 2 + 12, infoY + 24);
+  val(`KSH ${Number(order.tierPrice).toLocaleString()}`, W / 2 + 12, infoY + 30, true);
+
+  lbl('Clearance Status', W / 2 + 12, infoY + 40);
+  doc.setFontSize(8.5);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(16, 185, 129);
+  doc.text(`CONFIRMED (${order.confirmationCode || 'VERIFIED'})`, W / 2 + 12, infoY + 46);
+
+  // QR Code Generation
   const qrContainer = document.createElement('div');
   qrContainer.style.display = 'none';
   document.body.appendChild(qrContainer);
 
+  const targetId = order.ticketId || order.orderRef || 'TWC-VIP';
+  const qrText = `${window.location.origin}/verify/${encodeURIComponent(targetId)}`;
   new QRCode(qrContainer, {
-    text: verifyUrl,
-    width: 200,
-    height: 200,
-    colorDark: "#000000",
+    text: qrText,
+    width: 128,
+    height: 128,
+    colorDark: "#040711",
     colorLight: "#ffffff",
     correctLevel: QRCode.CorrectLevel.H
   });
@@ -1636,32 +1204,73 @@ async function generateLuxuryPDFTicket(order) {
       const qrImg = qrContainer.querySelector('img') || qrContainer.querySelector('canvas');
       const qrDataUrl = qrImg.src || qrImg.toDataURL('image/png');
 
-      doc.setFillColor(255, 255, 255);
-      doc.roundedRect(165, 20, 36, 36, 1.5, 1.5, 'F');
-      doc.addImage(qrDataUrl, 'PNG', 167, 22, 32, 32);
+      const qrSize = 40; // mm
+      const qrX = W / 2 - qrSize / 2;
+      const qrY = 182;
 
-      doc.setFontSize(5.5);
+      // QR Code Container Frame
+      doc.setFillColor(11, 19, 40);
+      doc.setDrawColor(212, 175, 55);
+      doc.setLineWidth(0.4);
+      doc.roundedRect(qrX - 4, qrY - 4, qrSize + 8, qrSize + 8, 2, 2, 'FD');
+
+      doc.addImage(qrDataUrl, 'PNG', qrX, qrY, qrSize, qrSize);
+
+      doc.setFontSize(6.5);
       doc.setFont('helvetica', 'normal');
       doc.setTextColor(148, 163, 184);
-      doc.text('SCAN FOR GATE VALIDATION', 183, 62, { align: 'center' });
-      doc.text(`INVESTMENT: KSH ${Number(order.tierPrice || 0).toLocaleString()}`, 183, 68, { align: 'center' });
-      doc.text(`REF: ${order.orderRef || 'VERIFIED'}`, 183, 74, { align: 'center' });
+      doc.text('CRYPTOGRAPHIC GATE ENTRY VERIFICATION', W / 2, qrY + qrSize + 8, { align: 'center' });
 
-      doc.setFontSize(5);
-      doc.setTextColor(100, 116, 139);
-      doc.text('NON-TRANSFERABLE PASS', 183, 89, { align: 'center' });
+      // Summit Logistics Details Grid
+      const logY = 245;
+      doc.setDrawColor(30, 45, 74);
+      doc.line(25, logY - 4, W - 25, logY - 4);
 
+      const items = [
+        ['CONVOCATION DATE', 'Sept 19, 2026 • 09:00 EAT'],
+        ['LOCATION', 'Nairobi, Kenya'],
+        ['SOVEREIGN PARENT', 'Qohel Africa Group'],
+        ['INTAKE INQUIRIES', 'legacylensnetwork@gmail.com']
+      ];
+
+      const colWidth = (W - 40) / 4;
+      items.forEach(([h, t], i) => {
+        const x = 20 + i * colWidth + colWidth / 2;
+        doc.setFontSize(6);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(100, 116, 139);
+        doc.text(h, x, logY, { align: 'center' });
+
+        doc.setFontSize(7);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(203, 213, 225);
+        doc.text(t, x, logY + 5, { align: 'center' });
+      });
+
+      // Bottom Gold Bar
+      doc.setFillColor(212, 175, 55);
+      doc.rect(0, H - 4, W, 4, 'F');
+
+      // Footer Legal Notice
+      doc.setFontSize(5.5);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(71, 85, 105);
+      doc.text(
+        'This pass is strictly non-transferable and requires valid photo identification matching the registered delegate legal name. Issued under sovereign charter of Qohel Africa Group Holdings.',
+        W / 2, H - 10, { align: 'center' }
+      );
+
+      // Save PDF
       const slug = (order.delegateName || 'Delegate').replace(/[^a-zA-Z0-9]/g, '-');
-      doc.save(`TWC2026-TICKET-${slug}-${order.ticketId || 'PASS'}.pdf`);
-      playSuccessChime();
+      doc.save(`TWC2026-${slug}-${order.tierCode || 'PASS'}.pdf`);
 
-    } catch (e) {
-      console.error('PDF generation error:', e);
+    } catch (pdfErr) {
+      console.error('PDF error:', pdfErr);
       alert('Could not render PDF. Please try again.');
     } finally {
       document.body.removeChild(qrContainer);
     }
-  }, 250);
+  }, 300);
 }
 
 /* ==========================================================================

@@ -54,8 +54,9 @@
     }
   </script>
 
-  <!-- Custom Stylesheet -->
+  <!-- Custom Stylesheets -->
   <link rel="stylesheet" href="/assets/css/styles.css">
+  <link rel="stylesheet" href="/assets/css/ticket-styles.css">
 </head>
 
 <body class="bg-obsidian text-slate-200 antialiased selection:bg-gold/30 selection:text-white">
@@ -2200,15 +2201,10 @@
             <span id="twc-status-feedback" class="text-xs font-mono text-slate-300">Auto-checking status every 3s...</span>
           </div>
 
-          <div class="flex items-center gap-2">
-            <button type="button" id="twc-simulate-success-btn" class="btn-outline-gold text-xs py-2 px-3 text-emerald-400 border-emerald-500/40 hover:border-emerald-400">
-              ⚡ Instant Pass Clearance
-            </button>
-            <button type="button" id="twc-check-status-btn" class="btn-gold text-xs py-2 px-4 flex items-center gap-2">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-              Verify Status
-            </button>
-          </div>
+          <button type="button" id="twc-check-status-btn" class="btn-gold text-xs py-2 px-4 flex items-center gap-2">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            Verify Payment Status
+          </button>
         </div>
 
         <div class="flex items-center justify-between text-[10px] font-mono text-slate-500 pt-1">
@@ -2219,58 +2215,57 @@
         </div>
       </div>
 
-      <!-- STEP 3: Payment Success + Live Ticket Render & Downloads -->
-      <div id="twc-step-success" class="hidden text-center py-4 space-y-6">
-        
+      <!-- STEP 3: Payment Success + Live Visual Ticket -->
+      <div id="twc-step-success" class="hidden text-center py-2 space-y-6">
+        <!-- Gold Checkmark -->
         <div class="flex items-center justify-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center text-emerald-400 shadow-[0_0_20px_rgba(52,211,153,0.4)]">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          <div class="w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500 flex items-center justify-center text-emerald-400">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
           </div>
           <div class="text-left">
-            <span class="badge-gold text-[9px] mb-0.5">PAYMENT &amp; SEAT CONFIRMED</span>
-            <h4 class="font-serif text-xl sm:text-2xl font-bold text-white leading-none">Your Official Pass is Generated</h4>
+            <span class="badge-gold text-[9px] mb-0.5">TRANSACTION VERIFIED</span>
+            <h4 class="font-serif text-2xl font-bold text-white leading-tight">Your Summit Pass is Minted</h4>
+            <p class="text-xs text-slate-300 font-mono">
+              M-PESA REF: <span id="twc-success-ref" class="text-gold font-bold"></span> · <span id="twc-success-amount" class="text-emerald-400 font-bold"></span>
+            </p>
           </div>
         </div>
 
-        <p class="text-xs text-slate-300 max-w-xl mx-auto">
-          Payment confirmed through PesaPal gateway. Your unique cryptographic access pass is rendered below with live scannable QR credentials (valid for up to 10 entry scans).
-        </p>
-
-        <!-- Dynamic Live Ticket Canvas/HTML Mount Container -->
-        <div class="overflow-x-auto py-2">
-          <div id="twc-live-ticket-mount" class="twc-ticket-wrapper">
-            <!-- Dynamically injected authentic ticket based on tier -->
-          </div>
+        <!-- Live Visual Ticket Card Preview Slot -->
+        <div id="twc-modal-ticket-preview" class="w-full text-left overflow-x-auto pb-2">
+          <!-- Dynamically Injected by tickets.js & app.js -->
         </div>
 
-        <!-- Action Control Buttons -->
-        <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+        <!-- Action Buttons -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <button type="button" id="twc-download-ticket-btn"
-            class="btn-gold py-3.5 px-6 text-xs font-bold flex items-center justify-center gap-2 shadow-2xl cursor-pointer">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-            <span>Download Official PDF Pass</span>
+            class="btn-gold text-xs py-3.5 px-4 font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-2xl cursor-pointer">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+            <span>Print / Save Pass</span>
           </button>
 
-          <button type="button" id="twc-download-png-btn"
-            class="btn-outline-gold py-3.5 px-6 text-xs font-bold flex items-center justify-center gap-2 shadow-xl cursor-pointer">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-            <span>Download HD Image (PNG)</span>
-          </button>
+          <a id="twc-open-ticket-page-btn" href="#" target="_blank"
+            class="btn-outline-gold text-xs py-3.5 px-4 font-bold uppercase tracking-wider flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+            <span>Open Ticket Page</span>
+          </a>
 
-          <button type="button" id="twc-verify-link-btn"
-            class="btn-outline-gold py-3.5 px-5 text-xs font-bold flex items-center justify-center gap-2 text-cyan-300 border-cyan-500/40 hover:border-cyan-400 cursor-pointer">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-            <span>Test Scannable Verification</span>
-          </button>
+          <a id="twc-test-qr-btn" href="#" target="_blank"
+            class="btn-outline-gold text-xs py-3.5 px-4 font-bold uppercase tracking-wider flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span>Test QR Verification</span>
+          </a>
         </div>
 
-        <p class="text-[10px] text-slate-500 font-mono">
-          Official receipt &amp; ticket issued under Qohel Africa Group Holdings // Verification Key: <span id="twc-success-ref" class="text-gold"></span>
+        <p class="text-[11px] text-slate-400 font-mono pt-1">
+          * Master pass valid for gate scans (General/VIP: 1 scan, Corporate Block: up to 10 scans). Official receipt recorded under QOHEL AFRICA GROUP.
         </p>
 
-        <button type="button" id="twc-close-success" class="btn-outline-gold text-xs py-2 px-8">
-          Done
-        </button>
+        <div class="pt-2">
+          <button type="button" id="twc-close-success" class="btn-outline-gold text-xs py-2 px-8">
+            Done
+          </button>
+        </div>
       </div>
 
       <!-- STEP 4: Payment Failed State -->
@@ -2349,77 +2344,6 @@
     </div>
   </div>
 
-  <!-- ==========================================================================
-       MODAL 6: TICKET SECURITY VALIDATION & SCAN ATTEMPTS TRACKER (MAX 10 SCANS)
-       ========================================================================== -->
-  <div id="ticket-verify-modal" class="modal-backdrop">
-    <div class="modal-dialog p-8 md:p-10 max-w-xl">
-      <button id="close-ticket-verify-modal" class="absolute top-6 right-6 text-slate-400 hover:text-gold p-1 transition-colors">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-      </button>
-
-      <!-- Status Header -->
-      <div id="verify-status-container" class="text-center mb-6">
-        <!-- Injected dynamically: valid or exhausted -->
-      </div>
-
-      <!-- Live Ticket Ledger Details -->
-      <div class="p-5 bg-black/80 rounded-lg border border-gold/30 text-left font-mono text-xs space-y-3 mb-6">
-        <div class="flex justify-between border-b border-white/10 pb-2">
-          <span class="text-slate-400">AUTHENTICATED ID:</span>
-          <strong id="verify-ticket-id" class="text-gold font-mono text-sm">#TWC-VIP-0001</strong>
-        </div>
-        <div class="flex justify-between border-b border-white/10 pb-2">
-          <span class="text-slate-400">REGISTERED ATTENDEE:</span>
-          <span id="verify-attendee-name" class="text-white font-bold"></span>
-        </div>
-        <div class="flex justify-between border-b border-white/10 pb-2">
-          <span class="text-slate-400">ORGANIZATION:</span>
-          <span id="verify-org-name" class="text-slate-200"></span>
-        </div>
-        <div class="flex justify-between border-b border-white/10 pb-2">
-          <span class="text-slate-400">PASS CLASS:</span>
-          <span id="verify-pass-class" class="text-gold-light font-bold"></span>
-        </div>
-        <div class="flex justify-between border-b border-white/10 pb-2">
-          <span class="text-slate-400">CONVENED BY:</span>
-          <span class="text-white font-bold">QOHEL AFRICA GROUP</span>
-        </div>
-        <div class="flex justify-between border-b border-white/10 pb-2">
-          <span class="text-slate-400">SUMMIT COORDINATES:</span>
-          <span class="text-slate-300 text-right">MARCH 24-26, 2026<br><span class="text-[10px] text-slate-400">NAIROBI, KENYA</span></span>
-        </div>
-        <div class="flex justify-between pt-1">
-          <span class="text-slate-400">GATEWAY REF:</span>
-          <span id="verify-payment-ref" class="text-slate-400 text-[10px]"></span>
-        </div>
-      </div>
-
-      <!-- 10-Scans Telemetry Counter Meter -->
-      <div class="p-4 bg-navy-deep rounded border border-gold/20 mb-6">
-        <div class="flex justify-between items-center mb-2 text-xs font-mono">
-          <span class="text-slate-300 font-bold">VENUE ENTRY SCAN ATTEMPTS</span>
-          <span id="verify-scan-counter-text" class="text-gold font-bold">Scan 1 / 10 Used</span>
-        </div>
-        <div class="w-full bg-black/60 rounded-full h-3 overflow-hidden border border-white/10">
-          <div id="verify-scan-progress-bar" class="bg-gradient-to-r from-emerald-500 via-amber-500 to-red-500 h-full transition-all duration-500" style="width: 10%;"></div>
-        </div>
-        <div class="flex justify-between text-[10px] font-mono text-slate-400 mt-2">
-          <span id="verify-remaining-scans-text">9 Admittances Remaining</span>
-          <span>Security Protocol: Max 10 Scans</span>
-        </div>
-      </div>
-
-      <div class="flex items-center justify-between">
-        <button type="button" id="close-ticket-verify-btn" class="btn-outline-gold text-xs py-2.5 px-6">
-          Close Verification
-        </button>
-        <span class="text-[10px] font-mono text-slate-500">QAG Fiduciary Security Ledger</span>
-      </div>
-
-    </div>
-  </div>
-
   <!-- Floating Mobile Action Dock -->
   <div class="mobile-bottom-dock">
     <a href="#hero" class="dock-btn">
@@ -2444,10 +2368,11 @@
     </a>
   </div>
 
-  <!-- PDF, QR & Canvas Libraries for Delegate Ticket Generation -->
+  <!-- PDF & QR Libraries for Delegate Ticket Generation -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <!-- Tickets & Gate Verification Module -->
+  <script src="/assets/js/tickets.js"></script>
   <!-- Sectors Data -->
   <script src="/assets/js/sectors-data.js"></script>
   <!-- Main Application Script -->

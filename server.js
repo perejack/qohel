@@ -46,6 +46,36 @@ app.all('/api/payment/status/:id', (req, res) => {
 app.all('/api/pesapal-ipn', adapt(ipnHandler));
 app.all('/api/public/pesapal-ipn', adapt(ipnHandler));
 
+// In-memory / cache ticket registry (with auto-sync)
+const ticketRegistry = new Map();
+
+// Ticket API endpoints
+app.post('/api/tickets', (req, res) => {
+  const ticket = req.body;
+  if (!ticket || !ticket.id) return res.status(400).json({ error: 'Invalid ticket payload' });
+  ticketRegistry.set(ticket.id.toUpperCase(), ticket);
+  res.json({ success: true, ticket });
+});
+
+app.get('/api/tickets/:id', (req, res) => {
+  const ticket = ticketRegistry.get(req.params.id.toUpperCase());
+  if (!ticket) return res.status(404).json({ error: 'Ticket not found' });
+  res.json(ticket);
+});
+
+app.post('/api/verify/:id', (req, res) => {
+  const id = req.params.id.toUpperCase();
+  const ticket = ticketRegistry.get(id);
+  if (!ticket) return res.status(404).json({ status: 'unknown' });
+  if (!Array.isArray(ticket.scans)) ticket.scans = [];
+  if (ticket.scans.length >= (ticket.seats || 1)) {
+    return res.json({ status: 'exhausted', ticket });
+  }
+  ticket.scans.push(new Date().toISOString());
+  ticketRegistry.set(id, ticket);
+  res.json({ status: 'valid', ticket });
+});
+
 // Health Check
 app.get('/api/health', (req, res) => {
   res.json({
@@ -54,6 +84,21 @@ app.get('/api/health', (req, res) => {
     gateway: 'PesaPal API v3 (Live/Production)',
     timestamp: new Date().toISOString(),
   });
+});
+
+// Dedicated HTML Routes
+app.get('/ticket/:id', (req, res) => {
+  res.sendFile(path.join(__dirname, 'ticket.html'));
+});
+app.get('/ticket', (req, res) => {
+  res.sendFile(path.join(__dirname, 'ticket.html'));
+});
+
+app.get('/verify/:id', (req, res) => {
+  res.sendFile(path.join(__dirname, 'verify.html'));
+});
+app.get('/verify', (req, res) => {
+  res.sendFile(path.join(__dirname, 'verify.html'));
 });
 
 // Serve frontend static files
