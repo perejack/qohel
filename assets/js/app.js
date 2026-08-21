@@ -967,6 +967,10 @@ function initTWCModals() {
         if (previewSlot && window.QAG_TICKETS) {
           window.QAG_TICKETS.renderTicketCardHTML(ticket, verifyUrl).then((cardHtml) => {
             previewSlot.innerHTML = cardHtml;
+            // Render the scannable QR codes after HTML is in the DOM
+            setTimeout(() => {
+              window.QAG_TICKETS.renderQRsInContainer(previewSlot, verifyUrl);
+            }, 50);
           });
         }
 
