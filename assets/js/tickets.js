@@ -1,4 +1,4 @@
-﻿/**
+/**
  * QAG_TICKETS — TWC 2026 Ticket Engine
  * Exact port of reference project TicketCard.tsx + tickets.ts + styles.css
  * All three ticket tier designs rendered 1:1 as HTML+CSS in vanilla JS
@@ -18,42 +18,43 @@
   const TIERS = [
     {
       id: 'general', index: 1,
-      name: 'General Delegate Bundle',
+      name: 'General Delegate Pass',
       shortName: 'General Admission Delegate',
-      price: 10, unit: 'Per Individual Delegate', seats: 1,
+      price: 2500, unit: 'Per Individual Delegate', seats: 1,
       cta: 'Claim General Delegate Pass', classLabel: 'DELEGATE',
       perks: [
-        'Full admission to summit mainstage and enterprise exhibition floor',
-        'Access to General Keynote & Economic Strategy Panels',
-        'Official TWC 2026 Digital Delegate Kit',
-        'Includes free 30-day Mindset Shift eBook download',
+        'Full admission to summit mainstage and exhibition pavilions',
+        'Immediate digital copy of "The 30-Day Mindset Shift" eBook',
+        'Includes free 30-day mindset shift ebook download',
       ],
     },
     {
       id: 'executive', index: 2,
       name: 'Executive Pass (VIP)',
       shortName: 'VIP Executive Pass',
-      price: 10, unit: 'Per Executive VIP', seats: 1,
+      price: 7500, unit: 'Per Executive VIP', seats: 1,
       cta: 'Secure Executive VIP Pass', badge: 'Recommended Executive VIP',
       classLabel: 'EXECUTIVE VIP',
       perks: [
-        'VIP access to all summit mainstage, closed-door breakouts & masterclasses',
-        'Exclusive High-Stature VIP Networking Luncheon & Private Lounge',
-        'Direct audience with verified wealth controllers & investors',
-        'Priority fast-track registration & Executive Swag Asset Kit',
+        'VIP access to all summit sessions and exclusive networking events',
+        'Premium seating at mainstage presentations',
+        'Digital + Physical copy of "The 30-Day Mindset Shift" (Hardcover)',
+        'Exclusive executive briefing materials',
+        'Priority access to speaker meet-and-greets',
       ],
     },
     {
       id: 'corporate', index: 3,
       name: 'Corporate Block Allocation',
       shortName: 'Institutional Group Allocation Pass',
-      price: 10, unit: 'Structured Master Pass (10 Delegates)', seats: 10,
+      price: 20000, unit: 'Structured Master Pass (10 Delegates)', seats: 10,
       cta: 'Claim Corporate Block (10 Passes)', classLabel: 'COHORT PASS',
       perks: [
         'Master corporate pass for up to 10 executive delegates (Quantity x 10)',
         'Reserved corporate seating row on main summit auditorium floor',
+        'Digital + Physical copies of "The 30-Day Mindset Shift" for corporate delegation',
         'Corporate entity mention in official Summit Dossier index',
-        'Valid for up to 10 scans at venue entry',
+        'Priority concierge and dedicated entry clearance',
       ],
     },
   ];
