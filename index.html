@@ -563,74 +563,208 @@
         </a>
       </div>
 
-    </div>
-
-    <!-- ========================================================================
-         DEEP DIVE 1: THE WEALTH CONVERGENCE (TWC 2026)
+      <!-- ========================================================================
+         TWC 2026 — FULL-BLEED CINEMATIC SECTION (exact design from screenshot)
          ======================================================================== -->
-    <div id="twc" class="pt-16 pb-24 border-t border-gold/20">
-      
-      <!-- TWC Hero Banner with Countdown -->
-      <div class="glass-panel rounded-2xl p-8 md:p-12 relative overflow-hidden border-gold/40 mb-16">
-        <div class="absolute inset-0 bg-gradient-to-r from-obsidian via-navy-deep/90 to-black/95 -z-10"></div>
-        <div class="absolute right-0 top-0 bottom-0 w-1/2 opacity-20 bg-cover bg-center -z-10" style="background-image: url('/assets/images/media_1787214838515.png');"></div>
+    <div id="twc" class="relative overflow-hidden" style="margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%); width: 100vw;">
 
-        <div class="max-w-3xl">
-          <div class="inline-flex items-center gap-2 mb-4">
-            <span class="badge-gold">FLAGSHIP ECONOMIC ASSEMBLY</span>
-            <span class="text-xs font-mono text-slate-400">NAIROBI, KENYA</span>
+      <!-- ── Part 1: ALEXANDRE background with floating TWC logo + Date + CTA ── -->
+      <div class="relative" style="min-height: 100vh;">
+
+        <!-- ALEXANDRE full-bleed background -->
+        <div class="absolute inset-0" style="
+          background-image: url('/assets/images/ALEXANDRE.jpeg');
+          background-size: cover;
+          background-position: center top;
+          background-repeat: no-repeat;
+        "></div>
+
+        <!-- Dark gradient overlay — heavier at bottom so countdown is readable -->
+        <div class="absolute inset-0" style="
+          background: linear-gradient(
+            to bottom,
+            rgba(4,7,17,0.18) 0%,
+            rgba(4,7,17,0.35) 35%,
+            rgba(4,7,17,0.75) 62%,
+            rgba(4,7,17,0.97) 80%,
+            rgba(4,7,17,1)    100%
+          );
+        "></div>
+
+        <!-- Content stack -->
+        <div class="relative z-10 flex flex-col items-center" style="padding-top: 56px;">
+
+          <!-- ── Floating TWC PNG Logo (top, centered) ── -->
+          <div class="flex flex-col items-center" style="margin-bottom: 0;">
+            <img
+              src="/assets/images/TWC_PNG-removebg-preview.png"
+              alt="TWC — The Wealth Convergence"
+              style="width: clamp(200px, 38vw, 480px); height: auto; object-fit: contain; filter: drop-shadow(0 0 32px rgba(212,175,55,0.45));"
+            >
           </div>
 
-          <h3 class="font-serif text-3xl sm:text-5xl font-extrabold text-white mb-3">
-            THE WEALTH CONVERGENCE
-          </h3>
-          <p class="text-gold font-serif text-xl sm:text-2xl tracking-widest mb-6">
-            TWC 2026 &bull; SEPTEMBER 19, 2026
-          </p>
+          <!-- ── September 19, 2026 date in large gold serif ── -->
+          <div style="
+            font-family: 'Cormorant Garamond', 'IM Fell English', Georgia, serif;
+            font-size: clamp(38px, 8vw, 108px);
+            font-weight: 700;
+            color: #d4af37;
+            letter-spacing: -0.01em;
+            line-height: 1;
+            text-align: center;
+            text-shadow: 0 4px 32px rgba(0,0,0,0.7), 0 0 60px rgba(212,175,55,0.25);
+            margin-top: clamp(16px, 2vw, 32px);
+            padding: 0 16px;
+          ">September 19, 2026</div>
 
-          <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-8">
-            The Wealth Convergence (TWC) 2026 is an elite, high-leverage economic ecosystem engineered to redefine financial clarity and marketplace influence across East Africa. Moving completely away from emotional or superficial business seminars, TWC 2026 delivers hard, data-driven frameworks on capital deployment, corporate asset financing, tax shielding, and structured asset protection.
-          </p>
+          <!-- ── Secure Executive Pass CTA (below date) ── -->
+          <div style="margin-top: clamp(24px, 3vw, 40px);">
+            <button
+              type="button"
+              class="trigger-twc-pass"
+              data-tier-name="Executive Pass (VIP)"
+              data-tier-price="KSH 10"
+              data-tier-code="VIP"
+              style="
+                background: linear-gradient(135deg, #9a7a1a 0%, #f5e8a0 45%, #d4af37 100%);
+                color: #111;
+                font-family: 'Montserrat', system-ui, sans-serif;
+                font-size: 14px;
+                font-weight: 700;
+                letter-spacing: 0.06em;
+                padding: 14px 40px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                box-shadow: 0 4px 24px rgba(212,175,55,0.35);
+                transition: opacity 0.2s, transform 0.2s;
+              "
+              onmouseover="this.style.opacity='0.88';this.style.transform='translateY(-1px)'"
+              onmouseout="this.style.opacity='1';this.style.transform='translateY(0)'"
+            >Secure Executive Pass</button>
+          </div>
 
-          <!-- Live Countdown Timer Component -->
-          <div class="mb-10">
-            <p class="text-xs font-mono uppercase text-gold tracking-widest mb-3">COUNTDOWN TO CONVERGENCE CONVOCATION</p>
-            <div class="flex flex-wrap items-center gap-3 sm:gap-4">
-              <div class="countdown-box">
-                <span id="twc-days" class="countdown-num">00</span>
-                <span class="countdown-label">Days</span>
-              </div>
-              <div class="text-gold font-serif text-2xl font-bold">:</div>
-              <div class="countdown-box">
-                <span id="twc-hours" class="countdown-num">00</span>
-                <span class="countdown-label">Hours</span>
-              </div>
-              <div class="text-gold font-serif text-2xl font-bold">:</div>
-              <div class="countdown-box">
-                <span id="twc-mins" class="countdown-num">00</span>
-                <span class="countdown-label">Mins</span>
-              </div>
-              <div class="text-gold font-serif text-2xl font-bold">:</div>
-              <div class="countdown-box">
-                <span id="twc-secs" class="countdown-num">00</span>
-                <span class="countdown-label">Secs</span>
-              </div>
+          <!-- ── COUNTDOWN — large gold numbers over the dark gradient ── -->
+          <div style="
+            margin-top: clamp(48px, 7vw, 96px);
+            padding: 0 16px 0;
+            width: 100%;
+            text-align: center;
+          ">
+            <!-- Timer digits: DD : HH : MM : SS -->
+            <div style="
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: clamp(4px, 1.5vw, 20px);
+              flex-wrap: nowrap;
+            ">
+              <span id="twc-days" style="
+                font-family: 'Cormorant Garamond', Georgia, serif;
+                font-size: clamp(60px, 13vw, 180px);
+                font-weight: 700;
+                color: #d4af37;
+                line-height: 1;
+                text-shadow: 0 4px 40px rgba(0,0,0,0.8), 0 0 80px rgba(212,175,55,0.2);
+                min-width: 2ch;
+                text-align: center;
+              ">00</span>
+
+              <span style="font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(50px,10vw,150px);font-weight:700;color:#d4af37;line-height:1;opacity:0.8;margin-bottom:clamp(4px,1vw,12px);">:</span>
+
+              <span id="twc-hours" style="
+                font-family: 'Cormorant Garamond', Georgia, serif;
+                font-size: clamp(60px, 13vw, 180px);
+                font-weight: 700;
+                color: #d4af37;
+                line-height: 1;
+                text-shadow: 0 4px 40px rgba(0,0,0,0.8), 0 0 80px rgba(212,175,55,0.2);
+                min-width: 2ch;
+                text-align: center;
+              ">00</span>
+
+              <span style="font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(50px,10vw,150px);font-weight:700;color:#d4af37;line-height:1;opacity:0.8;margin-bottom:clamp(4px,1vw,12px);">:</span>
+
+              <span id="twc-mins" style="
+                font-family: 'Cormorant Garamond', Georgia, serif;
+                font-size: clamp(60px, 13vw, 180px);
+                font-weight: 700;
+                color: #d4af37;
+                line-height: 1;
+                text-shadow: 0 4px 40px rgba(0,0,0,0.8), 0 0 80px rgba(212,175,55,0.2);
+                min-width: 2ch;
+                text-align: center;
+              ">00</span>
+
+              <span style="font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(50px,10vw,150px);font-weight:700;color:#d4af37;line-height:1;opacity:0.8;margin-bottom:clamp(4px,1vw,12px);">:</span>
+
+              <span id="twc-secs" style="
+                font-family: 'Cormorant Garamond', Georgia, serif;
+                font-size: clamp(60px, 13vw, 180px);
+                font-weight: 700;
+                color: #d4af37;
+                line-height: 1;
+                text-shadow: 0 4px 40px rgba(0,0,0,0.8), 0 0 80px rgba(212,175,55,0.2);
+                min-width: 2ch;
+                text-align: center;
+              ">00</span>
             </div>
-          </div>
 
-          <div class="flex flex-wrap items-center gap-4">
-            <a href="#twc-passes" class="btn-gold text-xs">
-              Secure Summit Passes
-            </a>
-            <a href="#twc-matrix" class="btn-outline-gold text-xs">
-              B2B Commercial Sponsorship Prospectus
-            </a>
+            <!-- Second Secure Executive Pass CTA -->
+            <div style="margin-top: clamp(24px, 3vw, 44px);">
+              <button
+                type="button"
+                class="trigger-twc-pass"
+                data-tier-name="Executive Pass (VIP)"
+                data-tier-price="KSH 10"
+                data-tier-code="VIP"
+                style="
+                  background: linear-gradient(135deg, #9a7a1a 0%, #f5e8a0 45%, #d4af37 100%);
+                  color: #111;
+                  font-family: 'Montserrat', system-ui, sans-serif;
+                  font-size: 14px;
+                  font-weight: 700;
+                  letter-spacing: 0.06em;
+                  padding: 14px 40px;
+                  border: none;
+                  border-radius: 4px;
+                  cursor: pointer;
+                  box-shadow: 0 4px 24px rgba(212,175,55,0.35);
+                  transition: opacity 0.2s, transform 0.2s;
+                "
+                onmouseover="this.style.opacity='0.88';this.style.transform='translateY(-1px)'"
+                onmouseout="this.style.opacity='1';this.style.transform='translateY(0)'"
+              >Secure Executive Pass</button>
+            </div>
+
+            <!-- Exclusivity disclaimer text -->
+            <p style="
+              max-width: 720px;
+              margin: clamp(20px, 2.5vw, 36px) auto clamp(32px, 4vw, 64px);
+              font-family: 'Montserrat', system-ui, sans-serif;
+              font-size: clamp(11px, 1.2vw, 14px);
+              line-height: 1.75;
+              color: rgba(255,255,255,0.55);
+              padding: 0 16px;
+            ">
+              Market sector exclusivity is strictly enforced. Once an industry category (Banking, FinTech, Logistics, Insurance or any other industry) completes its allocation,
+              <em style="color: rgba(212,175,55,0.7);">the sector is completely locked to rival corporate entities to protect partner dominance.</em>
+            </p>
           </div>
+          <!-- end countdown block -->
+
         </div>
+        <!-- end content stack -->
       </div>
+      <!-- end Part 1 -->
 
-      <!-- TWC Pass Tier Selection Grid -->
-      <div id="twc-passes" class="mb-20">
+    </div>
+    <!-- end TWC full-bleed section -->
+
+    <!-- ── Spacer so subsequent sections have proper padding ── -->
+    <div id="twc-passes-anchor" style="height: 0;"></div>
+
+    <div id="twc-passes" class="mb-20">
         <div class="text-center max-w-2xl mx-auto mb-10">
           <h4 class="font-serif text-2xl sm:text-3xl font-bold text-white mb-2">TWC 2026 Pass Tiers</h4>
           <p class="text-xs font-mono text-slate-400">Choose the access level that best suits your enterprise for an unparalleled experience.</p>
