@@ -563,21 +563,24 @@
         </a>
       </div>
 
-      <!-- ========================================================================
-         TWC 2026 — FULL-BLEED CINEMATIC SECTION (exact design from screenshot)
-         ======================================================================== -->
-    <div id="twc" class="relative overflow-hidden" style="margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%); width: 100vw;">
+    </div>
+  </section>
 
-      <!-- ── Part 1: ALEXANDRE background with floating TWC logo + Date + CTA ── -->
-      <div class="relative" style="min-height: 100vh;">
+  <!-- ========================================================================
+       TWC 2026 — FULL-BLEED CINEMATIC SECTION (Edge-to-Edge)
+       ======================================================================== -->
+  <section id="twc" class="w-full relative overflow-hidden bg-obsidian border-t border-gold/20">
 
-        <!-- ALEXANDRE full-bleed background -->
-        <div class="absolute inset-0" style="
-          background-image: url('/assets/images/ALEXANDRE.jpeg');
-          background-size: cover;
-          background-position: center top;
-          background-repeat: no-repeat;
-        "></div>
+    <!-- ── Hero Banner: ALEXANDRE full-bleed background + Floating TWC Logo + Countdown ── -->
+    <div class="relative w-full overflow-hidden" style="min-height: 100vh;">
+
+      <!-- ALEXANDRE full-bleed background image -->
+      <div class="absolute inset-0 w-full h-full" style="
+        background-image: url('/assets/images/ALEXANDRE.jpeg');
+        background-size: cover;
+        background-position: center 25%;
+        background-repeat: no-repeat;
+      "></div>
 
         <!-- Dark gradient overlay — heavier at bottom so countdown is readable -->
         <div class="absolute inset-0" style="
@@ -756,19 +759,17 @@
         </div>
         <!-- end content stack -->
       </div>
-      <!-- end Part 1 -->
+      <!-- end Hero Banner -->
 
-    </div>
-    <!-- end TWC full-bleed section -->
+      <!-- ── TWC Summit Content Container (Passes, Matrix, Programs) ── -->
+      <div class="max-w-7xl mx-auto px-4 md:px-8 py-20">
 
-    <!-- ── Spacer so subsequent sections have proper padding ── -->
-    <div id="twc-passes-anchor" style="height: 0;"></div>
-
-    <div id="twc-passes" class="mb-20">
-        <div class="text-center max-w-2xl mx-auto mb-10">
-          <h4 class="font-serif text-2xl sm:text-3xl font-bold text-white mb-2">TWC 2026 Pass Tiers</h4>
-          <p class="text-xs font-mono text-slate-400">Choose the access level that best suits your enterprise for an unparalleled experience.</p>
-        </div>
+        <!-- TWC Pass Tier Selection Grid -->
+        <div id="twc-passes" class="mb-20">
+          <div class="text-center max-w-2xl mx-auto mb-10">
+            <h4 class="font-serif text-2xl sm:text-3xl font-bold text-white mb-2">TWC 2026 Pass Tiers</h4>
+            <p class="text-xs font-mono text-slate-400">Choose the access level that best suits your enterprise for an unparalleled experience.</p>
+          </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <!-- Tier 1 -->
@@ -1009,10 +1010,11 @@
       </div>
 
     </div>
+  </section>
 
-    <!-- ========================================================================
-         DEEP DIVE 2: THE STRATEGIC LIGHT EXCHANGE (SLX)
-         ======================================================================== -->
+  <!-- ========================================================================
+       DEEP DIVE 2: THE STRATEGIC LIGHT EXCHANGE (SLX)
+       ======================================================================== -->
     <div id="slx" class="pt-16 pb-24 border-t border-gold/20 relative">
       
       <!-- Ambient Glow Behind SLX -->
