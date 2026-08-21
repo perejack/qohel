@@ -1157,7 +1157,7 @@ function initTWCModals() {
       const res = await fetch(`/api/payhero/status?checkoutId=${encodeURIComponent(orderTrackingId)}`);
       const data = await res.json();
 
-      if (data.status === 'COMPLETED' || data.state === 'paid' || data.success === true) {
+      if (data.status === 'COMPLETED' || data.state === 'paid') {
         stopPolling();
         playSuccessChime();
 
@@ -1168,7 +1168,7 @@ function initTWCModals() {
         else if (rawTier.includes('corp') || rawTier.includes('block') || rawTier.includes('20,000') || rawTier.includes('20000')) tierId = 'corporate';
 
         const tier = window.QAG_TICKETS ? window.QAG_TICKETS.getTier(tierId) : { id: tierId, seats: tierId === 'corporate' ? 10 : 1 };
-        const txRef = orderMeta.orderRef || data.confirmationCode || orderTrackingId || (window.QAG_TICKETS ? window.QAG_TICKETS.makeTransactionId() : 'SFC' + Date.now());
+        const txRef = data.confirmationCode || orderMeta.orderRef || orderTrackingId || (window.QAG_TICKETS ? window.QAG_TICKETS.makeTransactionId() : 'SFC' + Date.now());
         const ticketId = window.QAG_TICKETS ? window.QAG_TICKETS.makeTicketId(tier.id, txRef) : `TWC-${tier.id.toUpperCase()}-${txRef}`;
 
         // 2. Mint & Persist Ticket Object
@@ -1231,13 +1231,15 @@ function initTWCModals() {
         showStep(stepSuccess);
         return true;
 
-      } else if (data.status === 'FAILED') {
+      } else if (data.status === 'FAILED' || data.state === 'failed') {
         stopPolling();
         showStep(stepFailed);
         return false;
       } else {
         if (feedbackEl) {
-          feedbackEl.textContent = isManual ? 'Payment pending in M-Pesa. Complete PIN on phone.' : 'Awaiting M-Pesa PIN confirmation...';
+          feedbackEl.textContent = isManual
+            ? 'M-Pesa STK Prompt dispatched. Please check your phone & enter PIN.'
+            : 'Awaiting M-Pesa PIN confirmation from phone...';
         }
         return false;
       }

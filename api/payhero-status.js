@@ -68,14 +68,14 @@ module.exports = async function handler(req, res) {
 
     const rawStatus = String(data.status ?? data.Status ?? '').trim();
     const mappedStatus = mapPayheroStatus(rawStatus);
-    const paid = data.success === true || mappedStatus === 'paid';
+    const isPaid = mappedStatus === 'paid';
+    const isFailed = mappedStatus === 'failed';
 
-    console.log('[PayHero] Status result:', rawStatus, '->', mappedStatus);
+    console.log('[PayHero] Status result:', rawStatus, '-> mapped:', mappedStatus, 'isPaid:', isPaid);
 
     return res.status(200).json({
-      success: paid,
-      // Surface both naming conventions so the frontend works regardless
-      status: mappedStatus === 'paid' ? 'COMPLETED' : mappedStatus === 'failed' ? 'FAILED' : 'PENDING',
+      success: isPaid,
+      status: isPaid ? 'COMPLETED' : isFailed ? 'FAILED' : 'PENDING',
       state: mappedStatus,
       rawStatus,
       resultDesc:
@@ -84,13 +84,13 @@ module.exports = async function handler(req, res) {
         rawStatus,
       // M-Pesa receipt (if paid)
       confirmationCode:
-        (typeof data.provider_reference === 'string' ? data.provider_reference : null) ??
-        (typeof data.third_party_reference === 'string' ? data.third_party_reference : null) ??
-        (typeof data.payment_reference === 'string' ? data.payment_reference : null) ??
+        (typeof data.payment_reference === 'string' && data.payment_reference ? data.payment_reference : null) ??
+        (typeof data.third_party_reference === 'string' && data.third_party_reference ? data.third_party_reference : null) ??
+        (typeof data.provider_reference === 'string' && data.provider_reference ? data.provider_reference : null) ??
         '',
       receiptNumber:
-        (typeof data.provider_reference === 'string' ? data.provider_reference : null) ??
-        (typeof data.third_party_reference === 'string' ? data.third_party_reference : null) ??
+        (typeof data.payment_reference === 'string' && data.payment_reference ? data.payment_reference : null) ??
+        (typeof data.third_party_reference === 'string' && data.third_party_reference ? data.third_party_reference : null) ??
         null,
       raw: data,
     });
