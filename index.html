@@ -2613,44 +2613,74 @@
         </form>
       </div>
 
-      <!-- ── STEP 3: PROTECTED IN-BROWSER SECURE PDF VIEWER ── -->
-      <div id="vault-step-pdf" class="hidden space-y-4">
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-navy-deep p-3 rounded-lg border border-gold/30">
+      <!-- ── STEP 3: PROTECTED IN-BROWSER SECURE PDF VIEWER (MOBILE RESPONSIVE) ── -->
+      <div id="vault-step-pdf" class="hidden space-y-3">
+        
+        <!-- Header Bar -->
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 bg-navy-deep p-3 rounded-lg border border-gold/30">
           <div>
             <div class="flex items-center gap-2 mb-0.5">
-              <span class="badge-gold text-[9px]">RESTRICTED CLEARANCE ACTIVE</span>
-              <span class="text-[10px] font-mono text-emerald-400">SCREEN-ONLY MODE (NO DOWNLOAD)</span>
+              <span class="badge-gold text-[8px] sm:text-[9px]">RESTRICTED CLEARANCE ACTIVE</span>
+              <span class="text-[9px] sm:text-[10px] font-mono text-emerald-400">SCREEN-ONLY MODE (NO DOWNLOAD)</span>
             </div>
-            <p class="text-xs font-mono text-white">
+            <p class="text-[11px] sm:text-xs font-mono text-white truncate max-w-full">
               CLEARANCE ISSUED TO: <span id="vault-watermark-user" class="text-gold font-bold"></span> &middot; <span id="vault-watermark-org" class="text-slate-300"></span>
             </p>
           </div>
 
-          <div class="flex items-center gap-2 w-full sm:w-auto">
-            <button type="button" id="vault-back-from-pdf-btn" class="btn-outline-gold text-[11px] py-1.5 px-4 font-mono uppercase">
+          <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+            <button type="button" id="vault-back-from-pdf-btn" class="btn-outline-gold text-[10px] sm:text-[11px] py-1.5 px-3 font-mono uppercase w-full sm:w-auto">
               &larr; Return to Synopsis
             </button>
           </div>
         </div>
 
-        <!-- PDF Quick Section Jumper -->
-        <div class="flex flex-wrap items-center gap-2 py-1.5 px-3 bg-black/70 rounded border border-white/10 text-xs font-mono">
-          <span class="text-slate-400 text-[10px] uppercase">Jump to Blueprint:</span>
-          <button type="button" class="vault-jump-page px-2 py-1 bg-gold/10 hover:bg-gold hover:text-black text-gold rounded text-[10px] transition-colors" data-page="5">Sirwo CS-001 (p.5)</button>
-          <button type="button" class="vault-jump-page px-2 py-1 bg-gold/10 hover:bg-gold hover:text-black text-gold rounded text-[10px] transition-colors" data-page="20">Personal Brand SB-002 (p.20)</button>
-          <button type="button" class="vault-jump-page px-2 py-1 bg-gold/10 hover:bg-gold hover:text-black text-gold rounded text-[10px] transition-colors" data-page="29">QSR Engine SB-003 (p.29)</button>
-          <button type="button" class="vault-jump-page px-2 py-1 bg-gold/10 hover:bg-gold hover:text-black text-gold rounded text-[10px] transition-colors" data-page="38">Culinary SB-004 (p.38)</button>
+        <!-- Quick Blueprint Jump Navigation (Touch-Friendly Horizontal Scroll) -->
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs font-mono scrollbar-none">
+          <span class="text-slate-400 text-[10px] uppercase flex-shrink-0 mr-1">Jump to:</span>
+          <button type="button" class="vault-jump-page px-2.5 py-1 bg-gold/10 hover:bg-gold hover:text-black text-gold rounded text-[10px] sm:text-[11px] transition-colors flex-shrink-0 font-medium" data-page="5">Sirwo CS-001 (p.5)</button>
+          <button type="button" class="vault-jump-page px-2.5 py-1 bg-gold/10 hover:bg-gold hover:text-black text-gold rounded text-[10px] sm:text-[11px] transition-colors flex-shrink-0 font-medium" data-page="20">Personal Brand SB-002 (p.20)</button>
+          <button type="button" class="vault-jump-page px-2.5 py-1 bg-gold/10 hover:bg-gold hover:text-black text-gold rounded text-[10px] sm:text-[11px] transition-colors flex-shrink-0 font-medium" data-page="29">QSR Engine SB-003 (p.29)</button>
+          <button type="button" class="vault-jump-page px-2.5 py-1 bg-gold/10 hover:bg-gold hover:text-black text-gold rounded text-[10px] sm:text-[11px] transition-colors flex-shrink-0 font-medium" data-page="38">Culinary SB-004 (p.38)</button>
         </div>
 
-        <!-- Protected PDF Container (Anti-Download Protection & Overlay) -->
-        <div id="vault-pdf-container" class="relative w-full h-[65vh] rounded-lg overflow-hidden border-2 border-gold/40 bg-black" oncontextmenu="return false;">
-          <!-- Top Watermark Overlay -->
-          <div class="absolute top-2 right-4 z-20 pointer-events-none opacity-40 text-[10px] font-mono text-gold uppercase tracking-widest">
-            QOHEL AFRICA GROUP &middot; CONFIDENTIAL &middot; NOT FOR REDISTRIBUTION
+        <!-- Pagination & Zoom Control Toolbar -->
+        <div class="flex flex-wrap items-center justify-between gap-2 p-2 bg-black/80 rounded border border-white/10 text-xs font-mono">
+          <div class="flex items-center gap-1.5">
+            <button type="button" id="vault-pdf-prev" class="px-2.5 py-1 bg-white/5 hover:bg-gold hover:text-black rounded text-slate-200 text-xs transition-colors cursor-pointer">&larr; Prev</button>
+            <span class="text-[11px] text-slate-300 px-1">
+              Page <strong id="vault-pdf-current-page" class="text-gold">1</strong> / <span id="vault-pdf-total-pages" class="text-slate-400">48</span>
+            </span>
+            <button type="button" id="vault-pdf-next" class="px-2.5 py-1 bg-white/5 hover:bg-gold hover:text-black rounded text-slate-200 text-xs transition-colors cursor-pointer">Next &rarr;</button>
           </div>
 
-          <!-- Embedded PDF Iframe with toolbar disabled -->
-          <iframe id="vault-pdf-iframe" src="" class="w-full h-full border-0" title="Classified Company Portfolio Dossier"></iframe>
+          <div class="flex items-center gap-1.5 text-[11px]">
+            <button type="button" id="vault-pdf-zoom-out" class="px-2 py-1 bg-white/5 hover:bg-white/15 rounded text-slate-300 transition-colors cursor-pointer" title="Zoom Out">&minus;</button>
+            <button type="button" id="vault-pdf-zoom-fit" class="px-2 py-1 bg-white/5 hover:bg-white/15 text-gold font-bold rounded text-[10px] uppercase transition-colors cursor-pointer">Fit Width</button>
+            <button type="button" id="vault-pdf-zoom-in" class="px-2 py-1 bg-white/5 hover:bg-white/15 rounded text-slate-300 transition-colors cursor-pointer" title="Zoom In">&plus;</button>
+          </div>
+        </div>
+
+        <!-- Protected PDF Container (Anti-Download Protection, 100% Width Responsive Canvas) -->
+        <div id="vault-pdf-container" class="relative w-full h-[60vh] sm:h-[68vh] rounded-lg overflow-y-auto overflow-x-hidden border-2 border-gold/40 bg-black/90 p-1 sm:p-2 select-none" oncontextmenu="return false;">
+          <!-- Top Watermark Overlay -->
+          <div class="sticky top-2 right-2 z-20 pointer-events-none text-right pr-2">
+            <span class="text-[9px] font-mono text-gold/60 uppercase tracking-widest bg-black/80 px-2 py-0.5 rounded border border-gold/20">
+              CONFIDENTIAL &middot; NOT FOR REDISTRIBUTION
+            </span>
+          </div>
+
+          <!-- Responsive PDF.js Canvas Target -->
+          <div id="vault-pdf-canvas-wrapper" class="flex flex-col items-center justify-center min-h-full w-full max-w-full">
+            <div id="vault-pdf-loading" class="text-center py-12 text-xs font-mono text-gold animate-pulse">
+              <svg class="animate-spin h-6 w-6 text-gold mx-auto mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+              Decrypting &amp; Rendering Master Dossier...
+            </div>
+            <canvas id="vault-pdf-canvas" class="w-full max-w-full h-auto rounded shadow-2xl transition-all"></canvas>
+            
+            <!-- Fallback iframe if canvas is not supported -->
+            <iframe id="vault-pdf-iframe" src="" class="w-full h-full border-0 hidden" title="Classified Company Portfolio Dossier"></iframe>
+          </div>
         </div>
 
         <p class="text-[10px] text-slate-500 font-mono text-center">
@@ -2720,7 +2750,8 @@
     </a>
   </div>
 
-  <!-- PDF & QR Libraries for Delegate Ticket Generation -->
+  <!-- PDF & QR Libraries for Delegate Ticket Generation & In-Browser Dossier Viewing -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <!-- Tickets & Gate Verification Module -->
