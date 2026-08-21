@@ -101,6 +101,13 @@ app.get('/verify', (req, res) => {
   res.sendFile(path.join(__dirname, 'verify.html'));
 });
 
+app.get('/dossier/:id', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dossier.html'));
+});
+app.get('/dossier', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dossier.html'));
+});
+
 // Serve frontend static files
 app.use(express.static(__dirname));
 

@@ -789,8 +789,10 @@ function initGovernanceVault() {
   // Step 1 -> Step 2: Request Full Access Form
   if (unlockBtn) {
     unlockBtn.addEventListener('click', () => {
-      if (authorizedVaultUser) {
-        openPdfReader(authorizedVaultUser, currentVaultDoc.startPage);
+      const storedName = sessionStorage.getItem('qag_vault_name') || localStorage.getItem('qag_vault_name');
+      const storedOrg = sessionStorage.getItem('qag_vault_org') || localStorage.getItem('qag_vault_org');
+      if (storedName && storedOrg) {
+        window.location.href = `/dossier?asset=${encodeURIComponent(currentVaultDoc.id)}&page=${currentVaultDoc.startPage}&name=${encodeURIComponent(storedName)}&org=${encodeURIComponent(storedOrg)}`;
       } else {
         showVaultStep(stepRequest);
       }
@@ -804,212 +806,38 @@ function initGovernanceVault() {
     });
   }
 
-  // Step 3 -> Step 1: Return from PDF reader
-  if (backFromPdfBtn) {
-    backFromPdfBtn.addEventListener('click', () => {
-      showVaultStep(stepSynopsis);
-    });
-  }
-
-  // Step 2: Handle Clearance Form Submit
+  // Step 2: Handle Clearance Form Submit & Redirect to Full Page Dossier
   if (clearanceForm) {
     clearanceForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const name = document.getElementById('vault-user-name').value.trim();
-      const email = document.getElementById('vault-user-email').value.trim();
-      const org = document.getElementById('vault-user-org').value.trim();
-      const role = document.getElementById('vault-user-role').value.trim();
+      const name = document.getElementById('vault-user-name').value.trim() || 'Executive Delegate';
+      const email = document.getElementById('vault-user-email').value.trim() || 'executive@enterprise.com';
+      const org = document.getElementById('vault-user-org').value.trim() || 'Enterprise Holdings';
+      const role = document.getElementById('vault-user-role').value.trim() || 'Managing Director';
 
       authorizedVaultUser = { name, email, org, role };
+      sessionStorage.setItem('qag_vault_name', name);
+      sessionStorage.setItem('qag_vault_org', org);
+      localStorage.setItem('qag_vault_name', name);
+      localStorage.setItem('qag_vault_org', org);
+
       playSuccessChime();
-      openPdfReader(authorizedVaultUser, currentVaultDoc ? currentVaultDoc.startPage : 1);
+
+      // Smoothly navigate to dedicated full-page dossier viewer
+      setTimeout(() => {
+        window.location.href = `/dossier?asset=${encodeURIComponent(currentVaultDoc.id)}&page=${currentVaultDoc.startPage}&name=${encodeURIComponent(name)}&org=${encodeURIComponent(org)}`;
+      }, 250);
     });
   }
 
-  // ── PDF.js Mobile-Responsive Engine ──
-  let loadedPdfDoc = null;
-  let currentPdfPageNum = 1;
-  let currentPdfScale = 1.0;
-  let isPdfRendering = false;
-  let pendingPdfPageNum = null;
-
-  const pdfCanvas = document.getElementById('vault-pdf-canvas');
-  const pdfLoading = document.getElementById('vault-pdf-loading');
-  const pdfPrevBtn = document.getElementById('vault-pdf-prev');
-  const pdfNextBtn = document.getElementById('vault-pdf-next');
-  const pdfCurrentPageEl = document.getElementById('vault-pdf-current-page');
-  const pdfTotalPagesEl = document.getElementById('vault-pdf-total-pages');
-  const pdfZoomInBtn = document.getElementById('vault-pdf-zoom-in');
-  const pdfZoomOutBtn = document.getElementById('vault-pdf-zoom-out');
-  const pdfZoomFitBtn = document.getElementById('vault-pdf-zoom-fit');
-
-  if (window.pdfjsLib) {
-    window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-  }
-
-  async function renderPdfPage(num) {
-    if (!loadedPdfDoc || !pdfCanvas) return;
-    isPdfRendering = true;
-
-    try {
-      const page = await loadedPdfDoc.getPage(num);
-      const containerWidth = (pdfContainer ? pdfContainer.clientWidth - 20 : 600) || 600;
-
-      // Base viewport at scale 1.0
-      const unscaledViewport = page.getViewport({ scale: 1.0 });
-
-      // Automatically compute scale to fit 100% of container width (NO horizontal scroll)
-      const fitScale = (containerWidth / unscaledViewport.width) * currentPdfScale;
-      const pixelRatio = Math.min(window.devicePixelRatio || 1, 2); // crisp on high-DPI screens
-
-      const viewport = page.getViewport({ scale: fitScale * pixelRatio });
-
-      pdfCanvas.width = viewport.width;
-      pdfCanvas.height = viewport.height;
-      pdfCanvas.style.width = '100%';
-      pdfCanvas.style.maxWidth = '100%';
-      pdfCanvas.style.height = 'auto';
-      pdfCanvas.style.display = 'block';
-
-      const ctx = pdfCanvas.getContext('2d');
-      const renderContext = {
-        canvasContext: ctx,
-        viewport: viewport
-      };
-
-      if (pdfLoading) pdfLoading.classList.remove('hidden');
-
-      await page.render(renderContext).promise;
-
-      if (pdfLoading) pdfLoading.classList.add('hidden');
-      isPdfRendering = false;
-
-      currentPdfPageNum = num;
-      if (pdfCurrentPageEl) pdfCurrentPageEl.innerText = num;
-      if (pdfTotalPagesEl) pdfTotalPagesEl.innerText = loadedPdfDoc.numPages;
-
-      if (pendingPdfPageNum !== null) {
-        renderPdfPage(pendingPdfPageNum);
-        pendingPdfPageNum = null;
-      }
-    } catch (err) {
-      console.warn('PDF.js render fallback:', err);
-      isPdfRendering = false;
-      if (pdfLoading) pdfLoading.classList.add('hidden');
-    }
-  }
-
-  function queueRenderPage(num) {
-    if (isPdfRendering) {
-      pendingPdfPageNum = num;
-    } else {
-      renderPdfPage(num);
-    }
-  }
-
-  async function openPdfReader(user, pageNum) {
-    const watermarkUser = document.getElementById('vault-watermark-user');
-    const watermarkOrg = document.getElementById('vault-watermark-org');
-
-    if (watermarkUser) watermarkUser.innerText = (user.name || 'EXECUTIVE DELEGATE').toUpperCase();
-    if (watermarkOrg) watermarkOrg.innerText = (user.org || 'HOLDINGS NETWORK').toUpperCase();
-
-    const targetPage = parseInt(pageNum) || (currentVaultDoc ? currentVaultDoc.startPage : 1);
-    currentPdfPageNum = targetPage;
-    currentPdfScale = 1.0;
-
-    showVaultStep(stepPdf);
-
-    // If PDF.js is available, use responsive canvas rendering
-    if (window.pdfjsLib) {
-      if (pdfIframe) pdfIframe.classList.add('hidden');
-      if (pdfCanvas) pdfCanvas.classList.remove('hidden');
-
-      if (!loadedPdfDoc) {
-        if (pdfLoading) pdfLoading.classList.remove('hidden');
-        try {
-          const loadingTask = window.pdfjsLib.getDocument('/assets/LEGACY%20LENS%20NETWORK%20COMPANY%20PORFOLIO.pdf');
-          loadedPdfDoc = await loadingTask.promise;
-          if (pdfTotalPagesEl) pdfTotalPagesEl.innerText = loadedPdfDoc.numPages;
-        } catch (err) {
-          console.warn('Could not load via PDF.js, using iframe fallback:', err);
-          useIframeFallback(targetPage);
-          return;
-        }
-      }
-      renderPdfPage(targetPage);
-    } else {
-      useIframeFallback(targetPage);
-    }
-  }
-
-  function useIframeFallback(targetPage) {
-    if (pdfCanvas) pdfCanvas.classList.add('hidden');
-    if (pdfLoading) pdfLoading.classList.add('hidden');
-    if (pdfIframe) {
-      pdfIframe.classList.remove('hidden');
-      pdfIframe.src = `/assets/LEGACY%20LENS%20NETWORK%20COMPANY%20PORFOLIO.pdf#page=${targetPage}&toolbar=0&navpanes=0&scrollbar=1&view=FitH`;
-    }
-  }
-
-  // Prev / Next Page Controls
-  if (pdfPrevBtn) {
-    pdfPrevBtn.addEventListener('click', () => {
-      if (currentPdfPageNum <= 1) return;
-      currentPdfPageNum--;
-      queueRenderPage(currentPdfPageNum);
-    });
-  }
-
-  if (pdfNextBtn) {
-    pdfNextBtn.addEventListener('click', () => {
-      if (!loadedPdfDoc || currentPdfPageNum >= loadedPdfDoc.numPages) return;
-      currentPdfPageNum++;
-      queueRenderPage(currentPdfPageNum);
-    });
-  }
-
-  // Zoom Controls
-  if (pdfZoomInBtn) {
-    pdfZoomInBtn.addEventListener('click', () => {
-      currentPdfScale = Math.min(currentPdfScale + 0.2, 2.0);
-      queueRenderPage(currentPdfPageNum);
-    });
-  }
-
-  if (pdfZoomOutBtn) {
-    pdfZoomOutBtn.addEventListener('click', () => {
-      currentPdfScale = Math.max(currentPdfScale - 0.2, 0.8);
-      queueRenderPage(currentPdfPageNum);
-    });
-  }
-
-  if (pdfZoomFitBtn) {
-    pdfZoomFitBtn.addEventListener('click', () => {
-      currentPdfScale = 1.0;
-      queueRenderPage(currentPdfPageNum);
-    });
-  }
-
-  // Quick Section Jump Buttons
+  // Handle Quick Page Jump Buttons
   jumpBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      const page = parseInt(btn.getAttribute('data-page')) || 1;
-      currentPdfScale = 1.0;
-      currentPdfPageNum = page;
-      if (window.pdfjsLib && loadedPdfDoc) {
-        queueRenderPage(page);
-      } else {
-        useIframeFallback(page);
+      const page = btn.getAttribute('data-page') || '1';
+      if (pdfIframe) {
+        pdfIframe.src = `/assets/LEGACY%20LENS%20NETWORK%20COMPANY%20PORFOLIO.pdf#page=${page}&toolbar=0&navpanes=0&scrollbar=1&statusbar=0&messages=0&navpanes=0`;
       }
     });
-  });
-
-  // Re-scale canvas smoothly on window resize or orientation change
-  window.addEventListener('resize', () => {
-    if (loadedPdfDoc && !stepPdf.classList.contains('hidden')) {
-      queueRenderPage(currentPdfPageNum);
-    }
   });
 
   // Anti-Download & Security Protection (Disable right click inside container)
