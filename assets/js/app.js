@@ -541,71 +541,243 @@ function initMobileNavigation() {
    7. GOVERNANCE VAULT SYSTEM
    ========================================================================== */
 const VAULT_DOCS = {
-  vca: {
-    title: "Visual Conversion Architecture (VCA-2026-A)",
-    code: "MASTER ASSET ID // CLIENT ID: LLN001 // PROJECT ID: VCA-2026-A",
-    classification: "SOVEREIGN COMMERCIAL DIRECTIVE",
+  'lln-cs-001': {
+    id: "LLN-CS-001",
+    title: "Sirwo Cafe & Bistro: The Kittonny Dynasty Asset",
+    code: "MASTER CASE STUDY // ASSET ID: LLN-CS-001 // CLIENT ID: SIRWO-001",
+    classification: "MASTER CASE STUDY",
+    lead: "LEAD STRATEGIST: FAITH LAEL SILA, CHIEF EXECUTIVE OFFICER",
+    startPage: 5,
     body: `
-      <h4>Mandate Overview</h4>
-      <p>Visual Conversion Architecture executed for a premium fine-dining bistro & luxury hospitality venue in Nairobi. Reengineered flat lifestyle aesthetics into behavioral short-form video geometry, resulting in traceable digital-to-commercial foot traffic and optimized table reservation velocity.</p>
-      
-      <h4>Performance Telemetry</h4>
-      <ul class="space-y-2 my-3 font-mono text-xs">
-        <li class="flex justify-between border-b border-white/10 pb-1"><span>Total Organic Reach:</span> <strong class="text-gold">132,478 Verified Impressions</strong></li>
-        <li class="flex justify-between border-b border-white/10 pb-1"><span>Bio-Link Direct Conversion:</span> <strong class="text-gold">89.4% Attribution</strong></li>
-        <li class="flex justify-between border-b border-white/10 pb-1"><span>Paid Media Allocation:</span> <strong class="text-gold">KSh 0.00 (Zero Ad Spend)</strong></li>
-        <li class="flex justify-between pb-1"><span>Commercial Yield:</span> <strong class="text-gold">+340% Table Reservations</strong></li>
-      </ul>
-      <p class="text-xs text-slate-400">Archived under Qohel Africa Group Fiduciary Media Standards.</p>
+      <div class="space-y-4">
+        <div>
+          <h4 class="font-serif text-lg font-bold text-gold mb-1">Executive Background & Diagnostic</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Sirwo Cafe & Bistro is a premium culinary, social, and remote-work ecosystem located in Lavington, Nairobi. Owned by the prominent Kittonny family, the establishment holds deep-rooted prestige within the region's premium hospitality sector. Following a strategic management transition, Legacy Lens Network was formally retained to audit, re-architect, and manage the brand's entire digital media infrastructure.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="font-serif text-lg font-bold text-gold mb-1">Diagnosed Friction Points</h4>
+          <ul class="list-disc list-inside text-xs text-slate-300 space-y-1">
+            <li>Competing venues relied heavily on flat, superficial aesthetic B-roll with zero narrative retention.</li>
+            <li>Organic algorithm distribution was choked due to non-optimized hook geometry and lack of human-centric storytelling.</li>
+            <li>Mid-week table inventory suffered from underutilization outside traditional peak hours.</li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-serif text-lg font-bold text-gold mb-1">Strategic Interventions & Campaign Re-Engineering</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div class="p-3 bg-navy-deep rounded border border-gold/20">
+              <strong class="text-white block mb-1">01. The Quiz Night Engine:</strong>
+              <p class="text-slate-300 text-[11px]">Re-engineered mid-week casual trivia into a competitive social spectacle. Captured 100% table capacity on historically dead weeknights.</p>
+            </div>
+            <div class="p-3 bg-navy-deep rounded border border-gold/20">
+              <strong class="text-white block mb-1">02. The Jazz Night Acoustic Flow:</strong>
+              <p class="text-slate-300 text-[11px]">Fused atmospheric live music acoustics with fluid mixology transitions, targeting high-net-worth evening diner spend.</p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="font-serif text-lg font-bold text-gold mb-1">Verified Audit Telemetry</h4>
+          <ul class="space-y-1.5 font-mono text-xs">
+            <li class="flex justify-between border-b border-white/10 pb-1"><span class="text-slate-400">Total Organic Impressions:</span> <strong class="text-gold">132,478+ Verified Views</strong></li>
+            <li class="flex justify-between border-b border-white/10 pb-1"><span class="text-slate-400">Paid Media Spend:</span> <strong class="text-emerald-400">KSH 0.00 (100% Organic Growth)</strong></li>
+            <li class="flex justify-between border-b border-white/10 pb-1"><span class="text-slate-400">Event Night Capacity:</span> <strong class="text-gold">100% Table Occupancy</strong></li>
+            <li class="flex justify-between pb-1"><span class="text-slate-400">Algorithmic Synchronization:</span> <strong class="text-gold">Dopamine Window Triggering</strong></li>
+          </ul>
+        </div>
+      </div>
     `
   },
-  lhe: {
-    title: "Luxury Hospitality Ecosystem (LHE-2026-B)",
-    code: "MASTER ASSET ID // CLIENT ID: LLN002 // PROJECT ID: LHE-2026-B",
-    classification: "ENTERPRISE ASSET BLUEPRINT",
+
+  'lln-sb-002': {
+    id: "LLN-SB-002",
+    title: "Personal Brand Architecture & Executive Influence",
+    code: "MASTER STRATEGIC BLUEPRINT // ASSET ID: LLN-SB-002 // PROSPECT ID: PB-002",
+    classification: "MASTER STRATEGIC BLUEPRINT",
+    lead: "LEAD STRATEGIST: FAITH LAEL SILA, CHIEF EXECUTIVE OFFICER",
+    startPage: 20,
     body: `
-      <h4>Execution Summary</h4>
-      <p>Multi-tier visual status engineering deployed for high-end boutique hospitality chain. Integrated cinematic storytelling with closed-loop customer capture pipelines, driving direct corporate bookings and executive retreat buyouts.</p>
-      
-      <h4>Core Strategic Pillars</h4>
-      <ul class="space-y-2 my-3 font-mono text-xs">
-        <li class="flex justify-between border-b border-white/10 pb-1"><span>Brand Prestige Lift:</span> <strong class="text-gold">Category Dominance</strong></li>
-        <li class="flex justify-between border-b border-white/10 pb-1"><span>Direct Executive Retainers:</span> <strong class="text-gold">7 Enterprise Clients</strong></li>
-        <li class="flex justify-between pb-1"><span>System Protocol:</span> <strong class="text-gold">Sovereign Asset Protection</strong></li>
-      </ul>
+      <div class="space-y-4">
+        <div>
+          <h4 class="font-serif text-lg font-bold text-gold mb-1">Strategic Objective & Profile Overview</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Premium personal branding requires dismantling passive social media presence and replacing it with high-authority media ecosystems. This strategic directive maps out the complete digital evolution of a high-profile public figure pivoting from traditional civic structures into the luxury lifestyle and private investment sectors.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="font-serif text-lg font-bold text-gold mb-1">The 3-Phase Monetization Framework</h4>
+          <div class="space-y-2 text-xs text-slate-300">
+            <div class="p-2.5 bg-navy-deep rounded border border-white/10">
+              <strong class="text-gold">Phase 01 — Baseline Calibration & Aesthetic Deconstruction:</strong> Auditing historic public image, purging low-authority artifacts, and engineering executive wardrobe and spatial backdrops.
+            </div>
+            <div class="p-2.5 bg-navy-deep rounded border border-white/10">
+              <strong class="text-gold">Phase 02 — Thought-Leadership & Content Syndication:</strong> High-density video keynote capture, executive audio essay syndication, and high-status editorial placements.
+            </div>
+            <div class="p-2.5 bg-navy-deep rounded border border-white/10">
+              <strong class="text-gold">Phase 03 — High-Ticket Advisory Deal Flow:</strong> Converting personal authority into non-dilutive corporate board seats, sovereign advisory retainers, and private investor networks.
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="font-serif text-lg font-bold text-gold mb-1">Executive Deliverables</h4>
+          <ul class="space-y-1.5 font-mono text-xs">
+            <li class="flex justify-between border-b border-white/10 pb-1"><span class="text-slate-400">Target Demographic:</span> <strong class="text-gold">HNW Investors & Founders</strong></li>
+            <li class="flex justify-between border-b border-white/10 pb-1"><span class="text-slate-400">Reputation Armor:</span> <strong class="text-gold">Institutional Grade Authority</strong></li>
+            <li class="flex justify-between pb-1"><span class="text-slate-400">Commercial Architecture:</span> <strong class="text-emerald-400">High-Ticket Capital Attractor</strong></li>
+          </ul>
+        </div>
+      </div>
     `
   },
-  fiduciary: {
-    title: "Sovereign Fiduciary Charter & Compliance",
-    code: "QAG-GOV // FIDUCIARY-2026-Z",
-    classification: "INSTITUTIONAL CHARTER",
+
+  'lln-sb-003': {
+    id: "LLN-SB-003",
+    title: "Volumetric Discovery & Fast-Casual Acquisition Engine",
+    code: "MASTER STRATEGIC BLUEPRINT // ASSET ID: LLN-SB-003 // PROSPECT ID: QSR-003",
+    classification: "MASTER STRATEGIC BLUEPRINT",
+    lead: "LEAD STRATEGIST: FAITH LAEL SILA, CHIEF EXECUTIVE OFFICER",
+    startPage: 29,
     body: `
-      <h4>Fiduciary Standard</h4>
-      <p>Qohel Africa Group operates as a sovereign holding network strictly enforcing closed-loop capital protection, operational compliance, and non-dilutive economic leverage across all subsidiary divisions and incubators.</p>
-      <p class="my-2">Enterprise Standard: <em>Metrics track numbers; we track revenue. Legacy is built through execution.</em></p>
+      <div class="space-y-4">
+        <div>
+          <h4 class="font-serif text-lg font-bold text-gold mb-1">Primary Directive</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            The Quick-Service Restaurant (QSR) sector demands massive volumetric organic discovery and high-velocity consumer conversion. This strategic blueprint maps out the complete media overhaul for an established fast-casual restaurant franchise looking to translate its product appeal into localized digital dominance and accelerated multi-branch expansion.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="font-serif text-lg font-bold text-gold mb-1">Core Operational Mechanisms</h4>
+          <div class="space-y-2 text-xs text-slate-300">
+            <div class="p-2.5 bg-navy-deep rounded border border-white/10">
+              <strong class="text-gold">Psychological Sensory Hook Engineering:</strong> High-speed 4K macro capture focusing on sizzling textures, cheese pulls, and artisanal assembly designed to induce immediate impulse appetite responses.
+            </div>
+            <div class="p-2.5 bg-navy-deep rounded border border-white/10">
+              <strong class="text-gold">Geo-Fenced Commuter Ad Sprints:</strong> Algorithmic distribution scheduled to deliver high-impact promotional offers directly during Nairobi's prime lunch ordering (11:30 AM - 1:30 PM) and evening commute (5:00 PM - 8:00 PM) windows.
+            </div>
+            <div class="p-2.5 bg-navy-deep rounded border border-white/10">
+              <strong class="text-gold">Multi-Unit Franchise Replicability:</strong> Standardized visual playbooks and batch-production systems allowing multi-branch franchise rollouts with uniform brand fidelity.
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="font-serif text-lg font-bold text-gold mb-1">Commercial Impact Scope</h4>
+          <ul class="space-y-1.5 font-mono text-xs">
+            <li class="flex justify-between border-b border-white/10 pb-1"><span class="text-slate-400">Acquisition Velocity:</span> <strong class="text-gold">High-Volume Walk-In Lift</strong></li>
+            <li class="flex justify-between border-b border-white/10 pb-1"><span class="text-slate-400">Delivery Channel Growth:</span> <strong class="text-emerald-400">+180% Bio-Link Conversions</strong></li>
+            <li class="flex justify-between pb-1"><span class="text-slate-400">Franchise Scalability:</span> <strong class="text-gold">Modular Media Architecture</strong></li>
+          </ul>
+        </div>
+      </div>
+    `
+  },
+
+  'lln-sb-004': {
+    id: "LLN-SB-004",
+    title: "Culinary Logistics & Lifestyle Experience Strategy",
+    code: "MASTER STRATEGIC BLUEPRINT // ASSET ID: LLN-SB-004 // PROSPECT ID: CUL-004",
+    classification: "MASTER STRATEGIC BLUEPRINT",
+    lead: "LEAD STRATEGIST: FAITH LAEL SILA, CHIEF EXECUTIVE OFFICER",
+    startPage: 38,
+    body: `
+      <div class="space-y-4">
+        <div>
+          <h4 class="font-serif text-lg font-bold text-gold mb-1">Primary Directive</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            The premium culinary and private catering sector thrives on taste sensory triggers, aesthetic hygiene, and community destination positioning. This master strategic blueprint deconstructs the digital evolution of an artisanal kitchen franchise into an elite local hub for high-disposable-income families, remote executives, and luxury private caterings.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="font-serif text-lg font-bold text-gold mb-1">The 8-Part Content Matrix (Direct from Dossier)</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-slate-300">
+            <div class="p-2 bg-navy-deep rounded border border-white/5"><strong class="text-gold">01. "The Speed of Home":</strong> Cozy architecture & mental reset.</div>
+            <div class="p-2 bg-navy-deep rounded border border-white/5"><strong class="text-gold">02. "Love Language":</strong> Human culinary discipline & precision.</div>
+            <div class="p-2 bg-navy-deep rounded border border-white/5"><strong class="text-gold">03. "The Golden Hour Pour":</strong> Sunset seating & mixology.</div>
+            <div class="p-2 bg-navy-deep rounded border border-white/5"><strong class="text-gold">04. "The Artisanal Glow":</strong> High-temp ovens & crust blistering.</div>
+            <div class="p-2 bg-navy-deep rounded border border-white/5"><strong class="text-gold">05. "The Weekend Catalyst":</strong> Live acoustic vibrations & nightlife.</div>
+            <div class="p-2 bg-navy-deep rounded border border-white/5"><strong class="text-gold">06. "The Remote Work Lunch":</strong> Corporate lunch productivity.</div>
+            <div class="p-2 bg-navy-deep rounded border border-white/5"><strong class="text-gold">07. "The Macro Sensory Layer":</strong> High-contrast food cinematography.</div>
+            <div class="p-2 bg-navy-deep rounded border border-white/5"><strong class="text-gold">08. "The Generational Link-Up":</strong> Vibrant Sunday brunch dynamics.</div>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="font-serif text-lg font-bold text-gold mb-1">Operational SLA & Performance Guarantee</h4>
+          <ul class="space-y-1.5 font-mono text-xs">
+            <li class="flex justify-between border-b border-white/10 pb-1"><span class="text-slate-400">Post-Production Velocity:</span> <strong class="text-emerald-400">48-Hour Master Delivery SLA</strong></li>
+            <li class="flex justify-between border-b border-white/10 pb-1"><span class="text-slate-400">Audience Targeting:</span> <strong class="text-gold">Affluent Weekend Families & Executives</strong></li>
+            <li class="flex justify-between pb-1"><span class="text-slate-400">Retainer Architecture:</span> <strong class="text-gold">3-Month & 6-Month Category Dominance</strong></li>
+          </ul>
+        </div>
+      </div>
     `
   }
 };
+
+let currentVaultDoc = VAULT_DOCS['lln-cs-001'];
+let authorizedVaultUser = null;
 
 function initGovernanceVault() {
   const modal = document.getElementById('vault-modal');
   const closeBtn = document.getElementById('close-vault-modal');
   const triggers = document.querySelectorAll('.trigger-vault-doc');
 
+  const stepSynopsis = document.getElementById('vault-step-synopsis');
+  const stepRequest = document.getElementById('vault-step-request');
+  const stepPdf = document.getElementById('vault-step-pdf');
+
+  const unlockBtn = document.getElementById('vault-unlock-dossier-btn');
+  const backToSynopsisBtn = document.getElementById('vault-back-to-synopsis-btn');
+  const backFromPdfBtn = document.getElementById('vault-back-from-pdf-btn');
+  const clearanceForm = document.getElementById('vault-clearance-form');
+  const pdfIframe = document.getElementById('vault-pdf-iframe');
+  const pdfContainer = document.getElementById('vault-pdf-container');
+  const jumpBtns = document.querySelectorAll('.vault-jump-page');
+
   if (!modal) return;
 
-  function openVault(docKey) {
-    const doc = VAULT_DOCS[docKey] || VAULT_DOCS.vca;
-    document.getElementById('vault-doc-title').innerText = doc.title;
-    document.getElementById('vault-doc-code').innerText = doc.code;
-    document.getElementById('vault-doc-class').innerText = doc.classification;
-    document.getElementById('vault-doc-body').innerHTML = doc.body;
+  function showVaultStep(stepToShow) {
+    [stepSynopsis, stepRequest, stepPdf].forEach(s => {
+      if (s) s.classList.add('hidden');
+    });
+    if (stepToShow) stepToShow.classList.remove('hidden');
+  }
 
+  function openVault(docKey) {
+    const doc = VAULT_DOCS[docKey] || VAULT_DOCS['lln-cs-001'];
+    currentVaultDoc = doc;
+
+    const el = (id, text) => {
+      const e = document.getElementById(id);
+      if (e) e.innerText = text;
+    };
+
+    el('vault-doc-title', doc.title);
+    el('vault-doc-code', doc.code);
+    el('vault-doc-class', doc.classification);
+    el('vault-doc-lead', doc.lead);
+
+    const bodyEl = document.getElementById('vault-doc-body');
+    if (bodyEl) bodyEl.innerHTML = doc.body;
+
+    const targetTitle = document.getElementById('vault-request-target-title');
+    if (targetTitle) targetTitle.innerText = `${doc.id} (${doc.title})`;
+
+    showVaultStep(stepSynopsis);
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
     playTone(600, 0.08, 'sine');
   }
 
+  // Hook trigger buttons on cards
   triggers.forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -614,10 +786,88 @@ function initGovernanceVault() {
     });
   });
 
+  // Step 1 -> Step 2: Request Full Access Form
+  if (unlockBtn) {
+    unlockBtn.addEventListener('click', () => {
+      if (authorizedVaultUser) {
+        openPdfReader(authorizedVaultUser, currentVaultDoc.startPage);
+      } else {
+        showVaultStep(stepRequest);
+      }
+    });
+  }
+
+  // Step 2 -> Step 1: Back to synopsis
+  if (backToSynopsisBtn) {
+    backToSynopsisBtn.addEventListener('click', () => {
+      showVaultStep(stepSynopsis);
+    });
+  }
+
+  // Step 3 -> Step 1: Return from PDF reader
+  if (backFromPdfBtn) {
+    backFromPdfBtn.addEventListener('click', () => {
+      showVaultStep(stepSynopsis);
+    });
+  }
+
+  // Step 2: Handle Clearance Form Submit
+  if (clearanceForm) {
+    clearanceForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('vault-user-name').value.trim();
+      const email = document.getElementById('vault-user-email').value.trim();
+      const org = document.getElementById('vault-user-org').value.trim();
+      const role = document.getElementById('vault-user-role').value.trim();
+
+      authorizedVaultUser = { name, email, org, role };
+      playSuccessChime();
+      openPdfReader(authorizedVaultUser, currentVaultDoc ? currentVaultDoc.startPage : 1);
+    });
+  }
+
+  // Load and display in-browser protected PDF
+  function openPdfReader(user, pageNum) {
+    const watermarkUser = document.getElementById('vault-watermark-user');
+    const watermarkOrg = document.getElementById('vault-watermark-org');
+
+    if (watermarkUser) watermarkUser.innerText = (user.name || 'EXECUTIVE DELEGATE').toUpperCase();
+    if (watermarkOrg) watermarkOrg.innerText = (user.org || 'HOLDINGS NETWORK').toUpperCase();
+
+    const targetPage = pageNum || (currentVaultDoc ? currentVaultDoc.startPage : 1);
+    const pdfUrl = `/assets/LEGACY%20LENS%20NETWORK%20COMPANY%20PORFOLIO.pdf#page=${targetPage}&toolbar=0&navpanes=0&scrollbar=1&statusbar=0&messages=0&navpanes=0`;
+
+    if (pdfIframe) {
+      pdfIframe.src = pdfUrl;
+    }
+
+    showVaultStep(stepPdf);
+  }
+
+  // Handle Quick Page Jump Buttons
+  jumpBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const page = btn.getAttribute('data-page') || '1';
+      if (pdfIframe) {
+        pdfIframe.src = `/assets/LEGACY%20LENS%20NETWORK%20COMPANY%20PORFOLIO.pdf#page=${page}&toolbar=0&navpanes=0&scrollbar=1&statusbar=0&messages=0&navpanes=0`;
+      }
+    });
+  });
+
+  // Anti-Download & Security Protection (Disable right click inside container)
+  if (pdfContainer) {
+    pdfContainer.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      return false;
+    });
+  }
+
+  // Close modal logic
   if (closeBtn) {
     closeBtn.addEventListener('click', () => {
       modal.classList.remove('active');
       document.body.style.overflow = '';
+      if (pdfIframe) pdfIframe.src = '';
       playTone(350, 0.08, 'sine');
     });
   }
@@ -626,6 +876,7 @@ function initGovernanceVault() {
     if (e.target === modal) {
       modal.classList.remove('active');
       document.body.style.overflow = '';
+      if (pdfIframe) pdfIframe.src = '';
     }
   });
 }
