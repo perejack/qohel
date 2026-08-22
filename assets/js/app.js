@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initGovernanceVault();
   initBooksModal();
   initTWCModals();
+  initComingSoonModal();
   initMobileDockScrollspy();
   initMethodologyMatrix();
 });
@@ -1587,5 +1588,52 @@ function initMethodologyMatrix() {
     });
   });
 }
+
+/* ==========================================================================
+   12. COMING SOON MODAL CONTROLLER (POST-SUMMIT PROGRAMS)
+   ========================================================================== */
+function initComingSoonModal() {
+  const modal = document.getElementById('coming-soon-modal');
+  const closeBtn = document.getElementById('close-coming-soon-modal');
+  const triggers = document.querySelectorAll('.trigger-coming-soon');
+  const titleEl = document.getElementById('coming-soon-program-title');
+  const priceEl = document.getElementById('coming-soon-program-price');
+  const twcLink = document.getElementById('coming-soon-twc-link');
+
+  if (!modal) return;
+
+  function closeModal() {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+    playTone(350, 0.08, 'sine');
+  }
+
+  triggers.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const progName = btn.getAttribute('data-program-name') || 'Post-Summit Curriculum';
+      const progPrice = btn.getAttribute('data-program-price') || '';
+
+      if (titleEl) titleEl.textContent = progName;
+      if (priceEl) priceEl.textContent = progPrice ? `Investment Scope: ${progPrice}` : '';
+
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      playTone(550, 0.08, 'sine');
+    });
+  });
+
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+  if (twcLink) {
+    twcLink.addEventListener('click', () => {
+      closeModal();
+    });
+  }
+}
+
 
 
